@@ -1,0 +1,2069 @@
+火焰火灾fire目标检测数据预处理+模型训练评估+demo服务部署
+
+ssh://iot1@10.1.69.34:22/home/iot1/anaconda3/envs/py37/bin/python -u /home/iot1/sfz/examples_python34/fire_ult_yolov5_torch/02train_fire_ult_yolov5_torch/train_fire.py
+YOLOv5 🚀  torch 1.9.0+cu102 CUDA:0 (GeForce GTX 1080 Ti, 11178.5MB)
+
+Namespace(adam=False, artifact_alias='latest', batch_size=8, bbox_interval=-1, bucket='', cache_images=False, cfg='models/yolov5s.yaml', data='data/fire.yaml', device='', entity=None, epochs=100, evolve=False, exist_ok=False, global_rank=-1, hyp='data/hyp.scratch.yaml', image_weights=False, img_size=[640, 640], linear_lr=False, local_rank=-1, multi_scale=False, name='exp', noautoanchor=False, nosave=False, notest=False, project='runs-fire/train-1014', quad=False, rect=False, resume=False, save_dir='runs-fire/train-1014/exp2', save_period=-1, single_cls=False, sync_bn=False, total_batch_size=8, upload_dataset=False, weights='weights/yolov5s.pt', workers=0, world_size=1)
+tensorboard: Start with 'tensorboard --logdir runs-fire/train-1014', view at http://localhost:6006/
+hyperparameters: lr0=0.01, lrf=0.2, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=0.05, cls=0.5, cls_pw=1.0, obj=1.0, obj_pw=1.0, iou_t=0.2, anchor_t=4.0, anchors=3, fl_gamma=0.0, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, mosaic=1.0, mixup=0.0
+wandb: Install Weights & Biases for YOLOv5 logging with 'pip install wandb' (recommended)
+Overriding model.yaml nc=80 with nc=1
+Overriding model.yaml anchors with anchors=3
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1      3520  models.common.Focus                     [3, 32, 3]                    
+  1                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  2                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  3                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+  4                -1  1    156928  models.common.C3                        [128, 128, 3]                 
+  5                -1  1    295424  models.common.Conv                      [128, 256, 3, 2]              
+  6                -1  1    625152  models.common.C3                        [256, 256, 3]                 
+  7                -1  1   1180672  models.common.Conv                      [256, 512, 3, 2]              
+  8                -1  1    656896  models.common.SPP                       [512, 512, [5, 9, 13]]        
+  9                -1  1   1182720  models.common.C3                        [512, 512, 1, False]          
+ 10                -1  1    131584  models.common.Conv                      [512, 256, 1, 1]              
+ 11                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 12           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 13                -1  1    361984  models.common.C3                        [512, 256, 1, False]          
+ 14                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 15                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 16           [-1, 4]  1         0  models.common.Concat                    [1]                           
+ 17                -1  1     90880  models.common.C3                        [256, 128, 1, False]          
+ 18                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 19          [-1, 14]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1    296448  models.common.C3                        [256, 256, 1, False]          
+ 21                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 22          [-1, 10]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1   1182720  models.common.C3                        [512, 512, 1, False]          
+ 24      [17, 20, 23]  1     16182  models.yolo.Detect                      [1, [[0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]], [128, 256, 512]]
+/home/iot1/anaconda3/envs/py37/lib/python3.7/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /pytorch/c10/core/TensorImpl.h:1156.)
+  return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+Model Summary: 283 layers, 7063542 parameters, 7063542 gradients, 16.4 GFLOPS
+
+Transferred 354/362 items from weights/yolov5s.pt
+Scaled weight_decay = 0.0005
+Optimizer groups: 62 .bias, 62 conv.weight, 59 other
+train: Scanning '../../../datasets/od/VOCfire2yolo/labels/train.cache' images an
+val: Scanning '../../../datasets/od/VOCfire2yolo/labels/val.cache' images and laPlotting labels... 
+val: Scanning '../../../datasets/od/VOCfire2yolo/labels/val.cache' images and la
+
+autoanchor: Analyzing anchors... anchors/target = 0.01, Best Possible Recall (BPR) = 0.0026. Attempting to improve anchors, please wait...
+autoanchor: Running kmeans for 9 anchors on 1167 points...
+autoanchor: thr=0.25: 0.9983 best possible recall, 6.30 anchors past thr
+autoanchor: n=9, img_size=640, metric_all=0.406/0.770-mean/best, past_thr=0.525-mean: 48,54,  153,127,  210,224,  334,152,  544,150,  407,281,  593,247,  369,466,  580,362
+autoanchor: Evolving anchors with Genetic Algorithm: fitness = 0.7880: 100%|█| 1
+autoanchor: thr=0.25: 0.9983 best possible recall, 6.21 anchors past thr
+autoanchor: n=9, img_size=640, metric_all=0.405/0.788-mean/best, past_thr=0.529-mean: 33,48,  112,98,  182,187,  258,145,  518,130,  375,241,  290,317,  582,215,  559,336
+autoanchor: New anchors saved to model. Update model *.yaml to use these anchors in the future.
+
+fl_gamma 0.0
+Image sizes 640 train, 640 test
+Using 0 dataloader workers
+Logging results to runs-fire/train-1014/exp2
+Starting training for 100 epochs...
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      0/99     2.49G   0.09371   0.03579         0    0.1295        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.148       0.213      0.0862      0.0217
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      1/99      2.5G   0.06354   0.04028         0    0.1038        13       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.557       0.423       0.392       0.134
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      2/99      2.5G   0.05506   0.03737         0   0.09244        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.468       0.457        0.36       0.128
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      3/99      2.5G   0.05213   0.03453         0   0.08666        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.596       0.522       0.499       0.176
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      4/99      2.5G   0.04993   0.03346         0   0.08339        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492        0.62       0.581       0.536         0.2
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      5/99      2.5G   0.04882   0.03191         0   0.08072        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.557       0.526        0.49        0.16
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      6/99      2.5G   0.04796   0.03128         0   0.07924        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.662       0.555       0.579       0.206
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      7/99      2.5G   0.04715   0.03097         0   0.07812         6       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.502       0.648       0.504       0.191
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      8/99      2.5G   0.04341     0.031         0   0.07441        23       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.623       0.638        0.62       0.221
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      9/99      2.5G   0.04122   0.03163         0   0.07285         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.568       0.614       0.551       0.215
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     10/99      2.5G   0.03723   0.03279         0   0.07002        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.718       0.687       0.666       0.305
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     11/99      2.5G   0.03725   0.03165         0    0.0689        12       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.633       0.645       0.605       0.232
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     12/99      2.5G   0.03567   0.03115         0   0.06682        15       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492        0.63       0.551       0.585       0.201
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     13/99      2.5G   0.03711   0.03047         0   0.06758         8       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.709       0.626       0.667       0.297
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     14/99      2.5G    0.0357   0.03013         0   0.06583        15       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.738       0.614       0.676       0.285
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     15/99      2.5G   0.03467   0.03038         0   0.06506        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.773       0.638        0.69       0.301
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     16/99      2.5G   0.03426   0.02991         0   0.06417        14       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.722       0.724       0.755       0.342
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     17/99      2.5G   0.03239   0.02974         0   0.06212         8       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.772       0.654       0.692       0.329
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     18/99      2.5G   0.03321   0.02976         0   0.06296        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.727        0.76       0.772        0.36
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     19/99      2.5G   0.03229   0.02892         0   0.06121        12       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.745       0.758       0.766       0.373
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     20/99      2.5G   0.03214   0.02857         0    0.0607         7       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.708       0.734       0.742       0.336
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     21/99      2.5G   0.03089   0.02951         0    0.0604        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.698       0.788       0.776       0.362
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     22/99      2.5G   0.03096   0.02855         0   0.05951        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.781       0.717       0.767       0.372
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     23/99      2.5G   0.03042   0.02827         0   0.05869        17       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.691       0.754       0.755       0.371
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     24/99      2.5G   0.03018   0.02812         0    0.0583        14       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.738       0.752        0.78       0.366
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     25/99      2.5G   0.03038   0.02825         0   0.05863        14       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.779       0.715       0.781       0.372
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     26/99      2.5G   0.02997   0.02777         0   0.05774        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.748       0.759       0.775        0.39
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     27/99      2.5G   0.03019   0.02787         0   0.05806        16       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.752       0.752       0.764       0.354
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     28/99      2.5G   0.02856   0.02789         0   0.05645         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.741        0.73       0.768       0.372
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     29/99      2.5G   0.02802   0.02801         0   0.05603         7       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.784        0.76       0.803       0.398
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     30/99      2.5G   0.02812   0.02688         0     0.055        13       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.835       0.732       0.797       0.397
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     31/99      2.5G    0.0278   0.02671         0   0.05451        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.795       0.748       0.781       0.393
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     32/99      2.5G   0.02841   0.02662         0   0.05502         8       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.786       0.754       0.781       0.386
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     33/99      2.5G   0.02846   0.02618         0   0.05464        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.756       0.758       0.791       0.396
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     34/99      2.5G   0.02717   0.02692         0   0.05408        13       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.813       0.738       0.798       0.386
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     35/99      2.5G   0.02718   0.02656         0   0.05374         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.753       0.752       0.779       0.384
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     36/99      2.5G   0.02675   0.02605         0   0.05281         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492        0.76       0.752       0.781       0.389
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     37/99      2.5G   0.02684   0.02633         0   0.05317        12       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.758       0.791       0.799       0.401
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     38/99      2.5G    0.0272   0.02552         0   0.05271        15       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.768       0.734       0.787       0.399
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     39/99      2.5G   0.02626   0.02547         0   0.05173         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.762        0.77       0.796       0.392
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     40/99      2.5G   0.02617   0.02597         0   0.05214        12       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492         0.8       0.732       0.776       0.394
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     41/99      2.5G   0.02597   0.02541         0   0.05138         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.796       0.723       0.784       0.401
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     42/99      2.5G   0.02538    0.0247         0   0.05008         6       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.799       0.744       0.797       0.416
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     43/99      2.5G   0.02457   0.02522         0   0.04979        13       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.838       0.728       0.806       0.393
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     44/99      2.5G   0.02495   0.02452         0   0.04948         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.796       0.774       0.803       0.405
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     45/99      2.5G   0.02468   0.02492         0   0.04959        13       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.784       0.783       0.802       0.408
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     46/99      2.5G   0.02457   0.02437         0   0.04894        15       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.834       0.724       0.793       0.402
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     47/99      2.5G   0.02414   0.02499         0   0.04913        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.761       0.766       0.788       0.401
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     48/99      2.5G    0.0239   0.02427         0   0.04817        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.847       0.699       0.787       0.385
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     49/99      2.5G   0.02442   0.02464         0   0.04907        12       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.827       0.703       0.773       0.384
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     50/99      2.5G   0.02422   0.02497         0   0.04919         6       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.728       0.784       0.775       0.387
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     51/99      2.5G   0.02341   0.02447         0   0.04787        12       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.815       0.754       0.794       0.406
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     52/99      2.5G   0.02323   0.02408         0    0.0473        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.851       0.709       0.801       0.403
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     53/99      2.5G   0.02324   0.02392         0   0.04716        13       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.804       0.791       0.813       0.424
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     54/99      2.5G   0.02318   0.02377         0   0.04695         7       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.845       0.719       0.805       0.425
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     55/99      2.5G   0.02271   0.02267         0   0.04538        14       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.794       0.766       0.811       0.413
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     56/99      2.5G   0.02264   0.02308         0   0.04572        12       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.808       0.732       0.797       0.401
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     57/99      2.5G   0.02217   0.02285         0   0.04502        13       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.784       0.768       0.799        0.41
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     58/99      2.5G   0.02218   0.02275         0   0.04493        14       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.799       0.768       0.804         0.4
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     59/99      2.5G   0.02177     0.023         0   0.04477        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492        0.83       0.717       0.792       0.405
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     60/99      2.5G    0.0223   0.02253         0   0.04483         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.774       0.786         0.8       0.412
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     61/99      2.5G   0.02191   0.02259         0    0.0445        13       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.775       0.778       0.819       0.426
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     62/99      2.5G   0.02179   0.02302         0   0.04481        12       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.805       0.747       0.817       0.422
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     63/99      2.5G   0.02164   0.02241         0   0.04404        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.798        0.78       0.813       0.419
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     64/99      2.5G   0.02124   0.02226         0    0.0435        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.826        0.76       0.804        0.43
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     65/99      2.5G   0.02103   0.02206         0   0.04309        12       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.787       0.745       0.778       0.391
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     66/99      2.5G   0.02111   0.02243         0   0.04355         7       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.803       0.776       0.813        0.42
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     67/99      2.5G   0.02045   0.02208         0   0.04253        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.828       0.756       0.823       0.437
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     68/99      2.5G   0.02066   0.02209         0   0.04276         7       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.774       0.789       0.802       0.417
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     69/99      2.5G   0.02071   0.02228         0     0.043         8       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.796        0.77       0.811       0.417
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     70/99      2.5G   0.02015   0.02146         0    0.0416         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.792       0.797       0.815       0.425
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     71/99      2.5G   0.02019   0.02128         0   0.04147         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492        0.81       0.782       0.815       0.419
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     72/99      2.5G   0.02021   0.02096         0   0.04116         8       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.767       0.817        0.81       0.426
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     73/99      2.5G   0.01992   0.02055         0   0.04046        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.807       0.776       0.808       0.415
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     74/99      2.5G   0.01968   0.02119         0   0.04087        12       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.809       0.783       0.822       0.429
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     75/99      2.5G   0.01927   0.02038         0   0.03965        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.787       0.803       0.814       0.416
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     76/99      2.5G   0.01916   0.02062         0   0.03979        12       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.833        0.75       0.801       0.414
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     77/99      2.5G   0.01952    0.0202         0   0.03972        12       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.774       0.778       0.793       0.411
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     78/99      2.5G   0.01931   0.02048         0   0.03978        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.799        0.79       0.814        0.42
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     79/99      2.5G   0.01928   0.02027         0   0.03955        13       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.773       0.829       0.831       0.427
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     80/99      2.5G   0.01941    0.0205         0   0.03992        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.818       0.786        0.83       0.425
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     81/99      2.5G   0.01845    0.0203         0   0.03876        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.807       0.772       0.813        0.41
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     82/99      2.5G   0.01873   0.02038         0   0.03911         8       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.796       0.752       0.796       0.412
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     83/99      2.5G   0.01847    0.0202         0   0.03867        17       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.752       0.821       0.806       0.429
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     84/99      2.5G   0.01832   0.01949         0   0.03782         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.776       0.833       0.824        0.43
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     85/99      2.5G   0.01825   0.01984         0   0.03808         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.791       0.792       0.818       0.417
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     86/99      2.5G   0.01818   0.01956         0   0.03774        11       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492        0.82       0.778       0.826       0.424
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     87/99      2.5G   0.01802   0.01942         0   0.03744        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.853       0.746       0.826       0.429
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     88/99      2.5G    0.0181   0.01994         0   0.03804        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.832       0.778       0.819       0.418
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     89/99      2.5G   0.01778   0.01892         0   0.03671         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.849       0.754       0.817        0.43
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     90/99      2.5G   0.01778   0.01878         0   0.03656        13       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.784       0.813       0.827       0.433
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     91/99      2.5G   0.01781    0.0193         0   0.03711        14       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492        0.81       0.783       0.813        0.42
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     92/99      2.5G   0.01779   0.01919         0   0.03697        13       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.831       0.768       0.821       0.422
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     93/99      2.5G   0.01793   0.01862         0   0.03655        15       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.808        0.78       0.822       0.437
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     94/99      2.5G   0.01757   0.01904         0   0.03661         8       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.823       0.764       0.824       0.428
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     95/99      2.5G   0.01754   0.01938         0   0.03692        10       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.808       0.799       0.821       0.423
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     96/99      2.5G   0.01756   0.01956         0   0.03712         9       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.811       0.787       0.825        0.43
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     97/99      2.5G   0.01785   0.01911         0   0.03696         8       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.821       0.748       0.809       0.419
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     98/99      2.5G   0.01732   0.01822         0   0.03554        13       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.798       0.783       0.806       0.424
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     99/99      2.5G   0.01729   0.01906         0   0.03636        14       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         438         492       0.818       0.768       0.806       0.415
+100 epochs completed in 4.803 hours.
+
+Optimizer stripped from runs-fire/train-1014/exp2/weights/last.pt, 14.4MB
+Optimizer stripped from runs-fire/train-1014/exp2/weights/best.pt, 14.4MB
+
+Process finished with exit code 0
+
+
+ssh://iot1@10.1.69.34:22/home/iot1/anaconda3/envs/py37/bin/python -u /home/iot1/sfz/examples_python34/fire_ult_yolov5_torch/01processdata_genyolodataset/02genyolodataset_convert2Yolo-fixed_voc/02yolo2trainval.py
+processing set train
+100%|█████████████████████████████████████| 1020/1020 [00:00<00:00, 1853.02it/s]
+processing set val
+100%|███████████████████████████████████████| 438/438 [00:00<00:00, 2364.87it/s]
+processing set trainval
+100%|█████████████████████████████████████| 1458/1458 [00:00<00:00, 2076.37it/s]
+VOCfire2yolo/labels generated !
+VOCfire2yolo/images generated !
+总共耗时：1.4456653594970703s
+
+Process finished with exit code 0
+
+
+ssh://iot1@10.1.69.34:22/home/iot1/anaconda3/envs/py37/bin/python -u /home/iot1/sfz/examples_python34/fire_ult_yolov5_torch/01processdata_genyolodataset/01processdata_genVOC/02xml2box.py
+processing  VOCfire/JPEGImages/00000001.jpg
+processing  VOCfire/JPEGImages/00000002.jpg
+processing  VOCfire/JPEGImages/00000003.jpg
+processing  VOCfire/JPEGImages/00000004.jpg
+processing  VOCfire/JPEGImages/00000005.jpg
+processing  VOCfire/JPEGImages/00000006.jpg
+processing  VOCfire/JPEGImages/00000007.jpg
+processing  VOCfire/JPEGImages/00000008.jpg
+processing  VOCfire/JPEGImages/00000009.jpg
+processing  VOCfire/JPEGImages/00000010.jpg
+processing  VOCfire/JPEGImages/00000011.jpg
+processing  VOCfire/JPEGImages/00000012.jpg
+processing  VOCfire/JPEGImages/00000013.jpg
+processing  VOCfire/JPEGImages/00000014.jpg
+processing  VOCfire/JPEGImages/00000015.jpg
+processing  VOCfire/JPEGImages/00000016.jpg
+processing  VOCfire/JPEGImages/00000017.jpg
+processing  VOCfire/JPEGImages/00000018.jpg
+processing  VOCfire/JPEGImages/00000019.jpg
+processing  VOCfire/JPEGImages/00000020.jpg
+processing  VOCfire/JPEGImages/00000021.jpg
+processing  VOCfire/JPEGImages/00000022.jpg
+processing  VOCfire/JPEGImages/00000023.jpg
+processing  VOCfire/JPEGImages/00000024.jpg
+processing  VOCfire/JPEGImages/00000025.jpg
+processing  VOCfire/JPEGImages/00000026.jpg
+processing  VOCfire/JPEGImages/00000027.jpg
+processing  VOCfire/JPEGImages/00000028.jpg
+processing  VOCfire/JPEGImages/00000029.jpg
+processing  VOCfire/JPEGImages/00000030.jpg
+processing  VOCfire/JPEGImages/00000031.jpg
+processing  VOCfire/JPEGImages/00000032.jpg
+processing  VOCfire/JPEGImages/00000033.jpg
+processing  VOCfire/JPEGImages/00000034.jpg
+processing  VOCfire/JPEGImages/00000035.jpg
+processing  VOCfire/JPEGImages/00000036.jpg
+processing  VOCfire/JPEGImages/00000037.jpg
+processing  VOCfire/JPEGImages/00000038.jpg
+processing  VOCfire/JPEGImages/00000039.jpg
+processing  VOCfire/JPEGImages/00000040.jpg
+processing  VOCfire/JPEGImages/00000041.jpg
+processing  VOCfire/JPEGImages/00000042.jpg
+processing  VOCfire/JPEGImages/00000043.jpg
+processing  VOCfire/JPEGImages/00000044.jpg
+processing  VOCfire/JPEGImages/00000045.jpg
+processing  VOCfire/JPEGImages/00000046.jpg
+processing  VOCfire/JPEGImages/00000047.jpg
+processing  VOCfire/JPEGImages/00000048.jpg
+processing  VOCfire/JPEGImages/00000049.jpg
+processing  VOCfire/JPEGImages/00000050.jpg
+processing  VOCfire/JPEGImages/00000051.jpg
+processing  VOCfire/JPEGImages/00000052.jpg
+processing  VOCfire/JPEGImages/00000053.jpg
+processing  VOCfire/JPEGImages/00000054.jpg
+processing  VOCfire/JPEGImages/00000055.jpg
+processing  VOCfire/JPEGImages/00000056.jpg
+processing  VOCfire/JPEGImages/00000057.jpg
+processing  VOCfire/JPEGImages/00000058.jpg
+processing  VOCfire/JPEGImages/00000059.jpg
+processing  VOCfire/JPEGImages/00000060.jpg
+processing  VOCfire/JPEGImages/00000061.jpg
+processing  VOCfire/JPEGImages/00000062.jpg
+processing  VOCfire/JPEGImages/00000063.jpg
+processing  VOCfire/JPEGImages/00000064.jpg
+processing  VOCfire/JPEGImages/00000065.jpg
+processing  VOCfire/JPEGImages/00000066.jpg
+processing  VOCfire/JPEGImages/00000067.jpg
+processing  VOCfire/JPEGImages/00000068.jpg
+processing  VOCfire/JPEGImages/00000069.jpg
+processing  VOCfire/JPEGImages/00000070.jpg
+processing  VOCfire/JPEGImages/00000071.jpg
+processing  VOCfire/JPEGImages/00000072.jpg
+processing  VOCfire/JPEGImages/00000073.jpg
+processing  VOCfire/JPEGImages/00000074.jpg
+processing  VOCfire/JPEGImages/00000075.jpg
+processing  VOCfire/JPEGImages/00000076.jpg
+processing  VOCfire/JPEGImages/00000077.jpg
+processing  VOCfire/JPEGImages/00000078.jpg
+processing  VOCfire/JPEGImages/00000079.jpg
+processing  VOCfire/JPEGImages/00000080.jpg
+processing  VOCfire/JPEGImages/00000081.jpg
+processing  VOCfire/JPEGImages/00000082.jpg
+processing  VOCfire/JPEGImages/00000083.jpg
+processing  VOCfire/JPEGImages/00000084.jpg
+processing  VOCfire/JPEGImages/00000085.jpg
+processing  VOCfire/JPEGImages/00000086.jpg
+processing  VOCfire/JPEGImages/00000087.jpg
+processing  VOCfire/JPEGImages/00000088.jpg
+processing  VOCfire/JPEGImages/00000089.jpg
+processing  VOCfire/JPEGImages/00000090.jpg
+processing  VOCfire/JPEGImages/00000091.jpg
+processing  VOCfire/JPEGImages/00000092.jpg
+processing  VOCfire/JPEGImages/00000093.jpg
+processing  VOCfire/JPEGImages/00000094.jpg
+processing  VOCfire/JPEGImages/00000095.jpg
+processing  VOCfire/JPEGImages/00000096.jpg
+processing  VOCfire/JPEGImages/00000097.jpg
+processing  VOCfire/JPEGImages/00000098.jpg
+processing  VOCfire/JPEGImages/00000099.jpg
+processing  VOCfire/JPEGImages/00000100.jpg
+processing  VOCfire/JPEGImages/00000101.jpg
+processing  VOCfire/JPEGImages/00000102.jpg
+processing  VOCfire/JPEGImages/00000103.jpg
+processing  VOCfire/JPEGImages/00000104.jpg
+processing  VOCfire/JPEGImages/00000105.jpg
+processing  VOCfire/JPEGImages/00000106.jpg
+processing  VOCfire/JPEGImages/00000107.jpg
+processing  VOCfire/JPEGImages/00000108.jpg
+processing  VOCfire/JPEGImages/00000109.jpg
+processing  VOCfire/JPEGImages/00000110.jpg
+processing  VOCfire/JPEGImages/00000111.jpg
+processing  VOCfire/JPEGImages/00000112.jpg
+processing  VOCfire/JPEGImages/00000113.jpg
+processing  VOCfire/JPEGImages/00000114.jpg
+processing  VOCfire/JPEGImages/00000115.jpg
+processing  VOCfire/JPEGImages/00000116.jpg
+processing  VOCfire/JPEGImages/00000117.jpg
+processing  VOCfire/JPEGImages/00000118.jpg
+processing  VOCfire/JPEGImages/00000119.jpg
+processing  VOCfire/JPEGImages/00000120.jpg
+processing  VOCfire/JPEGImages/00000121.jpg
+processing  VOCfire/JPEGImages/00000122.jpg
+processing  VOCfire/JPEGImages/00000123.jpg
+processing  VOCfire/JPEGImages/00000124.jpg
+processing  VOCfire/JPEGImages/00000125.jpg
+processing  VOCfire/JPEGImages/00000126.jpg
+processing  VOCfire/JPEGImages/00000127.jpg
+processing  VOCfire/JPEGImages/00000128.jpg
+processing  VOCfire/JPEGImages/00000129.jpg
+processing  VOCfire/JPEGImages/00000130.jpg
+processing  VOCfire/JPEGImages/00000131.jpg
+processing  VOCfire/JPEGImages/00000132.jpg
+processing  VOCfire/JPEGImages/00000133.jpg
+processing  VOCfire/JPEGImages/00000134.jpg
+processing  VOCfire/JPEGImages/00000135.jpg
+processing  VOCfire/JPEGImages/00000136.jpg
+processing  VOCfire/JPEGImages/00000137.jpg
+processing  VOCfire/JPEGImages/00000138.jpg
+processing  VOCfire/JPEGImages/00000139.jpg
+processing  VOCfire/JPEGImages/00000140.jpg
+processing  VOCfire/JPEGImages/00000141.jpg
+processing  VOCfire/JPEGImages/00000142.jpg
+processing  VOCfire/JPEGImages/00000143.jpg
+processing  VOCfire/JPEGImages/00000144.jpg
+processing  VOCfire/JPEGImages/00000145.jpg
+processing  VOCfire/JPEGImages/00000146.jpg
+processing  VOCfire/JPEGImages/00000147.jpg
+processing  VOCfire/JPEGImages/00000148.jpg
+processing  VOCfire/JPEGImages/00000149.jpg
+processing  VOCfire/JPEGImages/00000150.jpg
+processing  VOCfire/JPEGImages/00000151.jpg
+processing  VOCfire/JPEGImages/00000152.jpg
+processing  VOCfire/JPEGImages/00000153.jpg
+processing  VOCfire/JPEGImages/00000154.jpg
+processing  VOCfire/JPEGImages/00000155.jpg
+processing  VOCfire/JPEGImages/00000156.jpg
+processing  VOCfire/JPEGImages/00000157.jpg
+processing  VOCfire/JPEGImages/00000158.jpg
+processing  VOCfire/JPEGImages/00000159.jpg
+processing  VOCfire/JPEGImages/00000160.jpg
+processing  VOCfire/JPEGImages/00000161.jpg
+processing  VOCfire/JPEGImages/00000162.jpg
+processing  VOCfire/JPEGImages/00000163.jpg
+processing  VOCfire/JPEGImages/00000164.jpg
+processing  VOCfire/JPEGImages/00000165.jpg
+processing  VOCfire/JPEGImages/00000166.jpg
+processing  VOCfire/JPEGImages/00000167.jpg
+processing  VOCfire/JPEGImages/00000168.jpg
+processing  VOCfire/JPEGImages/00000169.jpg
+processing  VOCfire/JPEGImages/00000170.jpg
+processing  VOCfire/JPEGImages/00000171.jpg
+processing  VOCfire/JPEGImages/00000172.jpg
+processing  VOCfire/JPEGImages/00000173.jpg
+processing  VOCfire/JPEGImages/00000174.jpg
+processing  VOCfire/JPEGImages/00000175.jpg
+processing  VOCfire/JPEGImages/00000176.jpg
+processing  VOCfire/JPEGImages/00000177.jpg
+processing  VOCfire/JPEGImages/00000178.jpg
+processing  VOCfire/JPEGImages/00000179.jpg
+processing  VOCfire/JPEGImages/00000180.jpg
+processing  VOCfire/JPEGImages/00000181.jpg
+processing  VOCfire/JPEGImages/00000182.jpg
+processing  VOCfire/JPEGImages/00000183.jpg
+processing  VOCfire/JPEGImages/00000184.jpg
+processing  VOCfire/JPEGImages/00000185.jpg
+processing  VOCfire/JPEGImages/00000186.jpg
+processing  VOCfire/JPEGImages/00000187.jpg
+processing  VOCfire/JPEGImages/00000188.jpg
+processing  VOCfire/JPEGImages/00000189.jpg
+processing  VOCfire/JPEGImages/00000190.jpg
+processing  VOCfire/JPEGImages/00000191.jpg
+processing  VOCfire/JPEGImages/00000192.jpg
+processing  VOCfire/JPEGImages/00000193.jpg
+processing  VOCfire/JPEGImages/00000194.jpg
+processing  VOCfire/JPEGImages/00000195.jpg
+processing  VOCfire/JPEGImages/00000196.jpg
+processing  VOCfire/JPEGImages/00000197.jpg
+processing  VOCfire/JPEGImages/00000198.jpg
+processing  VOCfire/JPEGImages/00000199.jpg
+processing  VOCfire/JPEGImages/00000200.jpg
+processing  VOCfire/JPEGImages/00000201.jpg
+processing  VOCfire/JPEGImages/00000202.jpg
+processing  VOCfire/JPEGImages/00000203.jpg
+processing  VOCfire/JPEGImages/00000204.jpg
+processing  VOCfire/JPEGImages/00000205.jpg
+processing  VOCfire/JPEGImages/00000206.jpg
+processing  VOCfire/JPEGImages/00000207.jpg
+processing  VOCfire/JPEGImages/00000208.jpg
+processing  VOCfire/JPEGImages/00000209.jpg
+processing  VOCfire/JPEGImages/00000210.jpg
+processing  VOCfire/JPEGImages/00000211.jpg
+processing  VOCfire/JPEGImages/00000212.jpg
+processing  VOCfire/JPEGImages/00000213.jpg
+processing  VOCfire/JPEGImages/00000214.jpg
+processing  VOCfire/JPEGImages/00000215.jpg
+processing  VOCfire/JPEGImages/00000216.jpg
+processing  VOCfire/JPEGImages/00000217.jpg
+processing  VOCfire/JPEGImages/00000218.jpg
+processing  VOCfire/JPEGImages/00000219.jpg
+processing  VOCfire/JPEGImages/00000220.jpg
+processing  VOCfire/JPEGImages/00000221.jpg
+processing  VOCfire/JPEGImages/00000222.jpg
+processing  VOCfire/JPEGImages/00000223.jpg
+processing  VOCfire/JPEGImages/00000224.jpg
+processing  VOCfire/JPEGImages/00000225.jpg
+processing  VOCfire/JPEGImages/00000226.jpg
+processing  VOCfire/JPEGImages/00000227.jpg
+processing  VOCfire/JPEGImages/00000228.jpg
+processing  VOCfire/JPEGImages/00000229.jpg
+processing  VOCfire/JPEGImages/00000230.jpg
+processing  VOCfire/JPEGImages/00000231.jpg
+processing  VOCfire/JPEGImages/00000232.jpg
+processing  VOCfire/JPEGImages/00000233.jpg
+processing  VOCfire/JPEGImages/00000234.jpg
+processing  VOCfire/JPEGImages/00000235.jpg
+processing  VOCfire/JPEGImages/00000236.jpg
+processing  VOCfire/JPEGImages/00000237.jpg
+processing  VOCfire/JPEGImages/00000238.jpg
+processing  VOCfire/JPEGImages/00000239.jpg
+processing  VOCfire/JPEGImages/00000240.jpg
+processing  VOCfire/JPEGImages/00000241.jpg
+processing  VOCfire/JPEGImages/00000242.jpg
+processing  VOCfire/JPEGImages/00000243.jpg
+processing  VOCfire/JPEGImages/00000244.jpg
+processing  VOCfire/JPEGImages/00000245.jpg
+processing  VOCfire/JPEGImages/00000246.jpg
+processing  VOCfire/JPEGImages/00000247.jpg
+processing  VOCfire/JPEGImages/00000248.jpg
+processing  VOCfire/JPEGImages/00000249.jpg
+processing  VOCfire/JPEGImages/00000250.jpg
+processing  VOCfire/JPEGImages/00000251.jpg
+processing  VOCfire/JPEGImages/00000252.jpg
+processing  VOCfire/JPEGImages/00000253.jpg
+processing  VOCfire/JPEGImages/00000254.jpg
+processing  VOCfire/JPEGImages/00000255.jpg
+processing  VOCfire/JPEGImages/00000256.jpg
+processing  VOCfire/JPEGImages/00000257.jpg
+processing  VOCfire/JPEGImages/00000258.jpg
+processing  VOCfire/JPEGImages/00000259.jpg
+processing  VOCfire/JPEGImages/00000260.jpg
+processing  VOCfire/JPEGImages/00000261.jpg
+processing  VOCfire/JPEGImages/00000262.jpg
+processing  VOCfire/JPEGImages/00000263.jpg
+processing  VOCfire/JPEGImages/00000264.jpg
+processing  VOCfire/JPEGImages/00000265.jpg
+processing  VOCfire/JPEGImages/00000266.jpg
+processing  VOCfire/JPEGImages/00000267.jpg
+processing  VOCfire/JPEGImages/00000268.jpg
+processing  VOCfire/JPEGImages/00000269.jpg
+processing  VOCfire/JPEGImages/00000270.jpg
+processing  VOCfire/JPEGImages/00000271.jpg
+processing  VOCfire/JPEGImages/00000272.jpg
+processing  VOCfire/JPEGImages/00000273.jpg
+processing  VOCfire/JPEGImages/00000274.jpg
+processing  VOCfire/JPEGImages/00000275.jpg
+processing  VOCfire/JPEGImages/00000276.jpg
+processing  VOCfire/JPEGImages/00000277.jpg
+processing  VOCfire/JPEGImages/00000278.jpg
+processing  VOCfire/JPEGImages/00000279.jpg
+processing  VOCfire/JPEGImages/00000280.jpg
+processing  VOCfire/JPEGImages/00000281.jpg
+processing  VOCfire/JPEGImages/00000282.jpg
+processing  VOCfire/JPEGImages/00000283.jpg
+processing  VOCfire/JPEGImages/00000284.jpg
+processing  VOCfire/JPEGImages/00000285.jpg
+processing  VOCfire/JPEGImages/00000286.jpg
+processing  VOCfire/JPEGImages/00000287.jpg
+processing  VOCfire/JPEGImages/00000288.jpg
+processing  VOCfire/JPEGImages/00000289.jpg
+processing  VOCfire/JPEGImages/00000290.jpg
+processing  VOCfire/JPEGImages/00000291.jpg
+processing  VOCfire/JPEGImages/00000292.jpg
+processing  VOCfire/JPEGImages/00000293.jpg
+processing  VOCfire/JPEGImages/00000294.jpg
+processing  VOCfire/JPEGImages/00000295.jpg
+processing  VOCfire/JPEGImages/00000296.jpg
+processing  VOCfire/JPEGImages/00000297.jpg
+processing  VOCfire/JPEGImages/00000298.jpg
+processing  VOCfire/JPEGImages/00000299.jpg
+processing  VOCfire/JPEGImages/00000300.jpg
+processing  VOCfire/JPEGImages/00000301.jpg
+processing  VOCfire/JPEGImages/00000302.jpg
+processing  VOCfire/JPEGImages/00000303.jpg
+processing  VOCfire/JPEGImages/00000304.jpg
+processing  VOCfire/JPEGImages/00000305.jpg
+processing  VOCfire/JPEGImages/00000306.jpg
+processing  VOCfire/JPEGImages/00000307.jpg
+processing  VOCfire/JPEGImages/00000308.jpg
+processing  VOCfire/JPEGImages/00000309.jpg
+processing  VOCfire/JPEGImages/00000310.jpg
+processing  VOCfire/JPEGImages/00000311.jpg
+processing  VOCfire/JPEGImages/00000312.jpg
+processing  VOCfire/JPEGImages/00000313.jpg
+processing  VOCfire/JPEGImages/00000314.jpg
+processing  VOCfire/JPEGImages/00000315.jpg
+processing  VOCfire/JPEGImages/00000316.jpg
+processing  VOCfire/JPEGImages/00000317.jpg
+processing  VOCfire/JPEGImages/00000318.jpg
+processing  VOCfire/JPEGImages/00000319.jpg
+processing  VOCfire/JPEGImages/00000320.jpg
+processing  VOCfire/JPEGImages/00000321.jpg
+processing  VOCfire/JPEGImages/00000322.jpg
+processing  VOCfire/JPEGImages/00000323.jpg
+processing  VOCfire/JPEGImages/00000324.jpg
+processing  VOCfire/JPEGImages/00000325.jpg
+processing  VOCfire/JPEGImages/00000326.jpg
+processing  VOCfire/JPEGImages/00000327.jpg
+processing  VOCfire/JPEGImages/00000328.jpg
+processing  VOCfire/JPEGImages/00000329.jpg
+processing  VOCfire/JPEGImages/00000330.jpg
+processing  VOCfire/JPEGImages/00000331.jpg
+processing  VOCfire/JPEGImages/00000332.jpg
+processing  VOCfire/JPEGImages/00000333.jpg
+processing  VOCfire/JPEGImages/00000334.jpg
+processing  VOCfire/JPEGImages/00000335.jpg
+processing  VOCfire/JPEGImages/00000336.jpg
+processing  VOCfire/JPEGImages/00000337.jpg
+processing  VOCfire/JPEGImages/00000338.jpg
+processing  VOCfire/JPEGImages/00000339.jpg
+processing  VOCfire/JPEGImages/00000340.jpg
+processing  VOCfire/JPEGImages/00000341.jpg
+processing  VOCfire/JPEGImages/00000342.jpg
+processing  VOCfire/JPEGImages/00000343.jpg
+processing  VOCfire/JPEGImages/00000344.jpg
+processing  VOCfire/JPEGImages/00000345.jpg
+processing  VOCfire/JPEGImages/00000346.jpg
+processing  VOCfire/JPEGImages/00000347.jpg
+processing  VOCfire/JPEGImages/00000348.jpg
+processing  VOCfire/JPEGImages/00000349.jpg
+processing  VOCfire/JPEGImages/00000350.jpg
+processing  VOCfire/JPEGImages/00000351.jpg
+processing  VOCfire/JPEGImages/00000352.jpg
+processing  VOCfire/JPEGImages/00000353.jpg
+processing  VOCfire/JPEGImages/00000354.jpg
+processing  VOCfire/JPEGImages/00000355.jpg
+processing  VOCfire/JPEGImages/00000356.jpg
+processing  VOCfire/JPEGImages/00000357.jpg
+processing  VOCfire/JPEGImages/00000358.jpg
+processing  VOCfire/JPEGImages/00000359.jpg
+processing  VOCfire/JPEGImages/00000360.jpg
+processing  VOCfire/JPEGImages/00000361.jpg
+processing  VOCfire/JPEGImages/00000362.jpg
+processing  VOCfire/JPEGImages/00000363.jpg
+processing  VOCfire/JPEGImages/00000364.jpg
+processing  VOCfire/JPEGImages/00000365.jpg
+processing  VOCfire/JPEGImages/00000366.jpg
+processing  VOCfire/JPEGImages/00000367.jpg
+processing  VOCfire/JPEGImages/00000368.jpg
+processing  VOCfire/JPEGImages/00000369.jpg
+processing  VOCfire/JPEGImages/00000370.jpg
+processing  VOCfire/JPEGImages/00000371.jpg
+processing  VOCfire/JPEGImages/00000372.jpg
+processing  VOCfire/JPEGImages/00000373.jpg
+processing  VOCfire/JPEGImages/00000374.jpg
+processing  VOCfire/JPEGImages/00000375.jpg
+processing  VOCfire/JPEGImages/00000376.jpg
+processing  VOCfire/JPEGImages/00000377.jpg
+processing  VOCfire/JPEGImages/00000378.jpg
+processing  VOCfire/JPEGImages/00000379.jpg
+processing  VOCfire/JPEGImages/00000380.jpg
+processing  VOCfire/JPEGImages/00000381.jpg
+processing  VOCfire/JPEGImages/00000382.jpg
+processing  VOCfire/JPEGImages/00000383.jpg
+processing  VOCfire/JPEGImages/00000384.jpg
+processing  VOCfire/JPEGImages/00000385.jpg
+processing  VOCfire/JPEGImages/00000386.jpg
+processing  VOCfire/JPEGImages/00000387.jpg
+processing  VOCfire/JPEGImages/00000388.jpg
+processing  VOCfire/JPEGImages/00000389.jpg
+processing  VOCfire/JPEGImages/00000390.jpg
+processing  VOCfire/JPEGImages/00000391.jpg
+processing  VOCfire/JPEGImages/00000392.jpg
+processing  VOCfire/JPEGImages/00000393.jpg
+processing  VOCfire/JPEGImages/00000394.jpg
+processing  VOCfire/JPEGImages/00000395.jpg
+processing  VOCfire/JPEGImages/00000396.jpg
+processing  VOCfire/JPEGImages/00000397.jpg
+processing  VOCfire/JPEGImages/00000398.jpg
+processing  VOCfire/JPEGImages/00000399.jpg
+processing  VOCfire/JPEGImages/00000400.jpg
+processing  VOCfire/JPEGImages/00000401.jpg
+processing  VOCfire/JPEGImages/00000402.jpg
+processing  VOCfire/JPEGImages/00000403.jpg
+processing  VOCfire/JPEGImages/00000404.jpg
+processing  VOCfire/JPEGImages/00000405.jpg
+processing  VOCfire/JPEGImages/00000406.jpg
+processing  VOCfire/JPEGImages/00000407.jpg
+processing  VOCfire/JPEGImages/00000408.jpg
+processing  VOCfire/JPEGImages/00000409.jpg
+processing  VOCfire/JPEGImages/00000410.jpg
+processing  VOCfire/JPEGImages/00000411.jpg
+processing  VOCfire/JPEGImages/00000412.jpg
+processing  VOCfire/JPEGImages/00000413.jpg
+processing  VOCfire/JPEGImages/00000414.jpg
+processing  VOCfire/JPEGImages/00000415.jpg
+processing  VOCfire/JPEGImages/00000416.jpg
+processing  VOCfire/JPEGImages/00000417.jpg
+processing  VOCfire/JPEGImages/00000418.jpg
+processing  VOCfire/JPEGImages/00000419.jpg
+processing  VOCfire/JPEGImages/00000420.jpg
+processing  VOCfire/JPEGImages/00000421.jpg
+processing  VOCfire/JPEGImages/00000422.jpg
+processing  VOCfire/JPEGImages/00000423.jpg
+processing  VOCfire/JPEGImages/00000424.jpg
+processing  VOCfire/JPEGImages/00000425.jpg
+processing  VOCfire/JPEGImages/00000426.jpg
+processing  VOCfire/JPEGImages/00000427.jpg
+processing  VOCfire/JPEGImages/00000428.jpg
+processing  VOCfire/JPEGImages/00000429.jpg
+processing  VOCfire/JPEGImages/00000430.jpg
+processing  VOCfire/JPEGImages/00000431.jpg
+processing  VOCfire/JPEGImages/00000432.jpg
+processing  VOCfire/JPEGImages/00000433.jpg
+processing  VOCfire/JPEGImages/00000434.jpg
+processing  VOCfire/JPEGImages/00000435.jpg
+processing  VOCfire/JPEGImages/00000436.jpg
+processing  VOCfire/JPEGImages/00000437.jpg
+processing  VOCfire/JPEGImages/00000438.jpg
+processing  VOCfire/JPEGImages/00000439.jpg
+processing  VOCfire/JPEGImages/00000440.jpg
+processing  VOCfire/JPEGImages/00000441.jpg
+processing  VOCfire/JPEGImages/00000442.jpg
+processing  VOCfire/JPEGImages/00000443.jpg
+processing  VOCfire/JPEGImages/00000444.jpg
+processing  VOCfire/JPEGImages/00000445.jpg
+processing  VOCfire/JPEGImages/00000446.jpg
+processing  VOCfire/JPEGImages/00000447.jpg
+processing  VOCfire/JPEGImages/00000448.jpg
+processing  VOCfire/JPEGImages/00000449.jpg
+processing  VOCfire/JPEGImages/00000450.jpg
+processing  VOCfire/JPEGImages/00000451.jpg
+processing  VOCfire/JPEGImages/00000452.jpg
+processing  VOCfire/JPEGImages/00000453.jpg
+processing  VOCfire/JPEGImages/00000454.jpg
+processing  VOCfire/JPEGImages/00000455.jpg
+processing  VOCfire/JPEGImages/00000456.jpg
+processing  VOCfire/JPEGImages/00000457.jpg
+processing  VOCfire/JPEGImages/00000458.jpg
+processing  VOCfire/JPEGImages/00000459.jpg
+processing  VOCfire/JPEGImages/00000460.jpg
+processing  VOCfire/JPEGImages/00000461.jpg
+processing  VOCfire/JPEGImages/00000462.jpg
+processing  VOCfire/JPEGImages/00000463.jpg
+processing  VOCfire/JPEGImages/00000464.jpg
+processing  VOCfire/JPEGImages/00000465.jpg
+processing  VOCfire/JPEGImages/00000466.jpg
+processing  VOCfire/JPEGImages/00000467.jpg
+processing  VOCfire/JPEGImages/00000468.jpg
+processing  VOCfire/JPEGImages/00000469.jpg
+processing  VOCfire/JPEGImages/00000470.jpg
+processing  VOCfire/JPEGImages/00000471.jpg
+processing  VOCfire/JPEGImages/00000472.jpg
+processing  VOCfire/JPEGImages/00000473.jpg
+processing  VOCfire/JPEGImages/00000474.jpg
+processing  VOCfire/JPEGImages/00000475.jpg
+processing  VOCfire/JPEGImages/00000476.jpg
+processing  VOCfire/JPEGImages/00000477.jpg
+processing  VOCfire/JPEGImages/00000478.jpg
+processing  VOCfire/JPEGImages/00000479.jpg
+processing  VOCfire/JPEGImages/00000480.jpg
+processing  VOCfire/JPEGImages/00000481.jpg
+processing  VOCfire/JPEGImages/00000482.jpg
+processing  VOCfire/JPEGImages/00000483.jpg
+processing  VOCfire/JPEGImages/00000484.jpg
+processing  VOCfire/JPEGImages/00000485.jpg
+processing  VOCfire/JPEGImages/00000486.jpg
+processing  VOCfire/JPEGImages/00000487.jpg
+processing  VOCfire/JPEGImages/00000488.jpg
+processing  VOCfire/JPEGImages/00000489.jpg
+processing  VOCfire/JPEGImages/00000490.jpg
+processing  VOCfire/JPEGImages/00000491.jpg
+processing  VOCfire/JPEGImages/00000492.jpg
+processing  VOCfire/JPEGImages/00000493.jpg
+processing  VOCfire/JPEGImages/00000494.jpg
+processing  VOCfire/JPEGImages/00000495.jpg
+processing  VOCfire/JPEGImages/00000496.jpg
+processing  VOCfire/JPEGImages/00000497.jpg
+processing  VOCfire/JPEGImages/00000498.jpg
+processing  VOCfire/JPEGImages/00000499.jpg
+processing  VOCfire/JPEGImages/00000500.jpg
+processing  VOCfire/JPEGImages/00000501.jpg
+processing  VOCfire/JPEGImages/00000502.jpg
+processing  VOCfire/JPEGImages/00000503.jpg
+processing  VOCfire/JPEGImages/00000504.jpg
+processing  VOCfire/JPEGImages/00000505.jpg
+processing  VOCfire/JPEGImages/00000506.jpg
+processing  VOCfire/JPEGImages/00000507.jpg
+processing  VOCfire/JPEGImages/00000508.jpg
+processing  VOCfire/JPEGImages/00000509.jpg
+processing  VOCfire/JPEGImages/00000510.jpg
+processing  VOCfire/JPEGImages/00000511.jpg
+processing  VOCfire/JPEGImages/00000512.jpg
+processing  VOCfire/JPEGImages/00000513.jpg
+processing  VOCfire/JPEGImages/00000514.jpg
+processing  VOCfire/JPEGImages/00000515.jpg
+processing  VOCfire/JPEGImages/00000516.jpg
+processing  VOCfire/JPEGImages/00000517.jpg
+processing  VOCfire/JPEGImages/00000518.jpg
+processing  VOCfire/JPEGImages/00000519.jpg
+processing  VOCfire/JPEGImages/00000520.jpg
+processing  VOCfire/JPEGImages/00000521.jpg
+processing  VOCfire/JPEGImages/00000522.jpg
+processing  VOCfire/JPEGImages/00000523.jpg
+processing  VOCfire/JPEGImages/00000524.jpg
+processing  VOCfire/JPEGImages/00000525.jpg
+processing  VOCfire/JPEGImages/00000526.jpg
+processing  VOCfire/JPEGImages/00000527.jpg
+processing  VOCfire/JPEGImages/00000528.jpg
+processing  VOCfire/JPEGImages/00000529.jpg
+processing  VOCfire/JPEGImages/00000530.jpg
+processing  VOCfire/JPEGImages/00000531.jpg
+processing  VOCfire/JPEGImages/00000532.jpg
+processing  VOCfire/JPEGImages/00000533.jpg
+processing  VOCfire/JPEGImages/00000534.jpg
+processing  VOCfire/JPEGImages/00000535.jpg
+processing  VOCfire/JPEGImages/00000536.jpg
+processing  VOCfire/JPEGImages/00000537.jpg
+processing  VOCfire/JPEGImages/00000538.jpg
+processing  VOCfire/JPEGImages/00000539.jpg
+processing  VOCfire/JPEGImages/00000540.jpg
+processing  VOCfire/JPEGImages/00000541.jpg
+processing  VOCfire/JPEGImages/00000542.jpg
+processing  VOCfire/JPEGImages/00000543.jpg
+processing  VOCfire/JPEGImages/00000544.jpg
+processing  VOCfire/JPEGImages/00000545.jpg
+processing  VOCfire/JPEGImages/00000546.jpg
+processing  VOCfire/JPEGImages/00000547.jpg
+processing  VOCfire/JPEGImages/00000548.jpg
+processing  VOCfire/JPEGImages/00000549.jpg
+processing  VOCfire/JPEGImages/00000550.jpg
+processing  VOCfire/JPEGImages/00000551.jpg
+processing  VOCfire/JPEGImages/00000552.jpg
+processing  VOCfire/JPEGImages/00000553.jpg
+processing  VOCfire/JPEGImages/00000554.jpg
+processing  VOCfire/JPEGImages/00000555.jpg
+processing  VOCfire/JPEGImages/00000556.jpg
+processing  VOCfire/JPEGImages/00000557.jpg
+processing  VOCfire/JPEGImages/00000558.jpg
+processing  VOCfire/JPEGImages/00000559.jpg
+processing  VOCfire/JPEGImages/00000560.jpg
+processing  VOCfire/JPEGImages/00000561.jpg
+processing  VOCfire/JPEGImages/00000562.jpg
+processing  VOCfire/JPEGImages/00000563.jpg
+processing  VOCfire/JPEGImages/00000564.jpg
+processing  VOCfire/JPEGImages/00000565.jpg
+processing  VOCfire/JPEGImages/00000566.jpg
+processing  VOCfire/JPEGImages/00000567.jpg
+processing  VOCfire/JPEGImages/00000568.jpg
+processing  VOCfire/JPEGImages/00000569.jpg
+processing  VOCfire/JPEGImages/00000570.jpg
+processing  VOCfire/JPEGImages/00000571.jpg
+processing  VOCfire/JPEGImages/00000572.jpg
+processing  VOCfire/JPEGImages/00000573.jpg
+processing  VOCfire/JPEGImages/00000574.jpg
+processing  VOCfire/JPEGImages/00000575.jpg
+processing  VOCfire/JPEGImages/00000576.jpg
+processing  VOCfire/JPEGImages/00000577.jpg
+processing  VOCfire/JPEGImages/00000578.jpg
+processing  VOCfire/JPEGImages/00000579.jpg
+processing  VOCfire/JPEGImages/00000580.jpg
+processing  VOCfire/JPEGImages/00000581.jpg
+processing  VOCfire/JPEGImages/00000582.jpg
+processing  VOCfire/JPEGImages/00000583.jpg
+processing  VOCfire/JPEGImages/00000584.jpg
+processing  VOCfire/JPEGImages/00000585.jpg
+processing  VOCfire/JPEGImages/00000586.jpg
+processing  VOCfire/JPEGImages/00000587.jpg
+processing  VOCfire/JPEGImages/00000588.jpg
+processing  VOCfire/JPEGImages/00000589.jpg
+processing  VOCfire/JPEGImages/00000590.jpg
+processing  VOCfire/JPEGImages/00000591.jpg
+processing  VOCfire/JPEGImages/00000592.jpg
+processing  VOCfire/JPEGImages/00000593.jpg
+processing  VOCfire/JPEGImages/00000594.jpg
+processing  VOCfire/JPEGImages/00000595.jpg
+processing  VOCfire/JPEGImages/00000596.jpg
+processing  VOCfire/JPEGImages/00000597.jpg
+processing  VOCfire/JPEGImages/00000598.jpg
+processing  VOCfire/JPEGImages/00000599.jpg
+processing  VOCfire/JPEGImages/00000600.jpg
+processing  VOCfire/JPEGImages/00000601.jpg
+processing  VOCfire/JPEGImages/00000602.jpg
+processing  VOCfire/JPEGImages/00000603.jpg
+processing  VOCfire/JPEGImages/00000604.jpg
+processing  VOCfire/JPEGImages/00000605.jpg
+processing  VOCfire/JPEGImages/00000606.jpg
+processing  VOCfire/JPEGImages/00000607.jpg
+processing  VOCfire/JPEGImages/00000608.jpg
+processing  VOCfire/JPEGImages/00000609.jpg
+processing  VOCfire/JPEGImages/00000610.jpg
+processing  VOCfire/JPEGImages/00000611.jpg
+processing  VOCfire/JPEGImages/00000612.jpg
+processing  VOCfire/JPEGImages/00000613.jpg
+processing  VOCfire/JPEGImages/00000614.jpg
+processing  VOCfire/JPEGImages/00000615.jpg
+processing  VOCfire/JPEGImages/00000616.jpg
+processing  VOCfire/JPEGImages/00000617.jpg
+processing  VOCfire/JPEGImages/00000618.jpg
+processing  VOCfire/JPEGImages/00000619.jpg
+processing  VOCfire/JPEGImages/00000620.jpg
+processing  VOCfire/JPEGImages/00000621.jpg
+processing  VOCfire/JPEGImages/00000622.jpg
+processing  VOCfire/JPEGImages/00000623.jpg
+processing  VOCfire/JPEGImages/00000624.jpg
+processing  VOCfire/JPEGImages/00000625.jpg
+processing  VOCfire/JPEGImages/00000626.jpg
+processing  VOCfire/JPEGImages/00000627.jpg
+processing  VOCfire/JPEGImages/00000628.jpg
+processing  VOCfire/JPEGImages/00000629.jpg
+processing  VOCfire/JPEGImages/00000630.jpg
+processing  VOCfire/JPEGImages/00000631.jpg
+processing  VOCfire/JPEGImages/00000632.jpg
+processing  VOCfire/JPEGImages/00000633.jpg
+processing  VOCfire/JPEGImages/00000634.jpg
+processing  VOCfire/JPEGImages/00000635.jpg
+processing  VOCfire/JPEGImages/00000636.jpg
+processing  VOCfire/JPEGImages/00000637.jpg
+processing  VOCfire/JPEGImages/00000638.jpg
+processing  VOCfire/JPEGImages/00000639.jpg
+processing  VOCfire/JPEGImages/00000640.jpg
+processing  VOCfire/JPEGImages/00000641.jpg
+processing  VOCfire/JPEGImages/00000642.jpg
+processing  VOCfire/JPEGImages/00000643.jpg
+processing  VOCfire/JPEGImages/00000644.jpg
+processing  VOCfire/JPEGImages/00000645.jpg
+processing  VOCfire/JPEGImages/00000646.jpg
+processing  VOCfire/JPEGImages/00000647.jpg
+processing  VOCfire/JPEGImages/00000648.jpg
+processing  VOCfire/JPEGImages/00000649.jpg
+processing  VOCfire/JPEGImages/00000650.jpg
+processing  VOCfire/JPEGImages/00000651.jpg
+processing  VOCfire/JPEGImages/00000652.jpg
+processing  VOCfire/JPEGImages/00000653.jpg
+processing  VOCfire/JPEGImages/00000654.jpg
+processing  VOCfire/JPEGImages/00000655.jpg
+processing  VOCfire/JPEGImages/00000656.jpg
+processing  VOCfire/JPEGImages/00000657.jpg
+processing  VOCfire/JPEGImages/00000658.jpg
+processing  VOCfire/JPEGImages/00000659.jpg
+processing  VOCfire/JPEGImages/00000660.jpg
+processing  VOCfire/JPEGImages/00000661.jpg
+processing  VOCfire/JPEGImages/00000662.jpg
+processing  VOCfire/JPEGImages/00000663.jpg
+processing  VOCfire/JPEGImages/00000664.jpg
+processing  VOCfire/JPEGImages/00000665.jpg
+processing  VOCfire/JPEGImages/00000666.jpg
+processing  VOCfire/JPEGImages/00000667.jpg
+processing  VOCfire/JPEGImages/00000668.jpg
+processing  VOCfire/JPEGImages/00000669.jpg
+processing  VOCfire/JPEGImages/00000670.jpg
+processing  VOCfire/JPEGImages/00000671.jpg
+processing  VOCfire/JPEGImages/00000672.jpg
+processing  VOCfire/JPEGImages/00000673.jpg
+processing  VOCfire/JPEGImages/00000674.jpg
+processing  VOCfire/JPEGImages/00000675.jpg
+processing  VOCfire/JPEGImages/00000676.jpg
+processing  VOCfire/JPEGImages/00000677.jpg
+processing  VOCfire/JPEGImages/00000678.jpg
+processing  VOCfire/JPEGImages/00000679.jpg
+processing  VOCfire/JPEGImages/00000680.jpg
+processing  VOCfire/JPEGImages/00000681.jpg
+processing  VOCfire/JPEGImages/00000682.jpg
+processing  VOCfire/JPEGImages/00000683.jpg
+processing  VOCfire/JPEGImages/00000684.jpg
+processing  VOCfire/JPEGImages/00000685.jpg
+processing  VOCfire/JPEGImages/00000686.jpg
+processing  VOCfire/JPEGImages/00000687.jpg
+processing  VOCfire/JPEGImages/00000688.jpg
+processing  VOCfire/JPEGImages/00000689.jpg
+processing  VOCfire/JPEGImages/00000690.jpg
+processing  VOCfire/JPEGImages/00000691.jpg
+processing  VOCfire/JPEGImages/00000692.jpg
+processing  VOCfire/JPEGImages/00000693.jpg
+processing  VOCfire/JPEGImages/00000694.jpg
+processing  VOCfire/JPEGImages/00000695.jpg
+processing  VOCfire/JPEGImages/00000696.jpg
+processing  VOCfire/JPEGImages/00000697.jpg
+processing  VOCfire/JPEGImages/00000698.jpg
+processing  VOCfire/JPEGImages/00000699.jpg
+processing  VOCfire/JPEGImages/00000700.jpg
+processing  VOCfire/JPEGImages/00000701.jpg
+processing  VOCfire/JPEGImages/00000702.jpg
+processing  VOCfire/JPEGImages/00000703.jpg
+processing  VOCfire/JPEGImages/00000704.jpg
+processing  VOCfire/JPEGImages/00000705.jpg
+processing  VOCfire/JPEGImages/00000706.jpg
+processing  VOCfire/JPEGImages/00000707.jpg
+processing  VOCfire/JPEGImages/00000708.jpg
+processing  VOCfire/JPEGImages/00000709.jpg
+processing  VOCfire/JPEGImages/00000710.jpg
+processing  VOCfire/JPEGImages/00000711.jpg
+processing  VOCfire/JPEGImages/00000712.jpg
+processing  VOCfire/JPEGImages/00000713.jpg
+processing  VOCfire/JPEGImages/00000714.jpg
+processing  VOCfire/JPEGImages/00000715.jpg
+processing  VOCfire/JPEGImages/00000716.jpg
+processing  VOCfire/JPEGImages/00000717.jpg
+processing  VOCfire/JPEGImages/00000718.jpg
+processing  VOCfire/JPEGImages/00000719.jpg
+processing  VOCfire/JPEGImages/00000720.jpg
+processing  VOCfire/JPEGImages/00000721.jpg
+processing  VOCfire/JPEGImages/00000722.jpg
+processing  VOCfire/JPEGImages/00000723.jpg
+processing  VOCfire/JPEGImages/00000724.jpg
+processing  VOCfire/JPEGImages/00000725.jpg
+processing  VOCfire/JPEGImages/00000726.jpg
+processing  VOCfire/JPEGImages/00000727.jpg
+processing  VOCfire/JPEGImages/00000728.jpg
+processing  VOCfire/JPEGImages/00000729.jpg
+processing  VOCfire/JPEGImages/00000730.jpg
+processing  VOCfire/JPEGImages/00000731.jpg
+processing  VOCfire/JPEGImages/00000732.jpg
+processing  VOCfire/JPEGImages/00000733.jpg
+processing  VOCfire/JPEGImages/00000734.jpg
+processing  VOCfire/JPEGImages/00000735.jpg
+processing  VOCfire/JPEGImages/00000736.jpg
+processing  VOCfire/JPEGImages/00000737.jpg
+processing  VOCfire/JPEGImages/00000738.jpg
+processing  VOCfire/JPEGImages/00000739.jpg
+processing  VOCfire/JPEGImages/00000740.jpg
+processing  VOCfire/JPEGImages/00000741.jpg
+processing  VOCfire/JPEGImages/00000742.jpg
+processing  VOCfire/JPEGImages/00000743.jpg
+processing  VOCfire/JPEGImages/00000744.jpg
+processing  VOCfire/JPEGImages/00000745.jpg
+processing  VOCfire/JPEGImages/00000746.jpg
+processing  VOCfire/JPEGImages/00000747.jpg
+processing  VOCfire/JPEGImages/00000748.jpg
+processing  VOCfire/JPEGImages/00000749.jpg
+processing  VOCfire/JPEGImages/00000750.jpg
+processing  VOCfire/JPEGImages/00000751.jpg
+processing  VOCfire/JPEGImages/00000752.jpg
+processing  VOCfire/JPEGImages/00000753.jpg
+processing  VOCfire/JPEGImages/00000754.jpg
+processing  VOCfire/JPEGImages/00000755.jpg
+processing  VOCfire/JPEGImages/00000756.jpg
+processing  VOCfire/JPEGImages/00000757.jpg
+processing  VOCfire/JPEGImages/00000758.jpg
+processing  VOCfire/JPEGImages/00000759.jpg
+processing  VOCfire/JPEGImages/00000760.jpg
+processing  VOCfire/JPEGImages/00000761.jpg
+processing  VOCfire/JPEGImages/00000762.jpg
+processing  VOCfire/JPEGImages/00000763.jpg
+processing  VOCfire/JPEGImages/00000764.jpg
+processing  VOCfire/JPEGImages/00000765.jpg
+processing  VOCfire/JPEGImages/00000766.jpg
+processing  VOCfire/JPEGImages/00000767.jpg
+processing  VOCfire/JPEGImages/00000768.jpg
+processing  VOCfire/JPEGImages/00000769.jpg
+processing  VOCfire/JPEGImages/00000770.jpg
+processing  VOCfire/JPEGImages/00000771.jpg
+processing  VOCfire/JPEGImages/00000772.jpg
+processing  VOCfire/JPEGImages/00000773.jpg
+processing  VOCfire/JPEGImages/00000774.jpg
+processing  VOCfire/JPEGImages/00000775.jpg
+processing  VOCfire/JPEGImages/00000776.jpg
+processing  VOCfire/JPEGImages/00000777.jpg
+processing  VOCfire/JPEGImages/00000778.jpg
+processing  VOCfire/JPEGImages/00000779.jpg
+processing  VOCfire/JPEGImages/00000780.jpg
+processing  VOCfire/JPEGImages/00000781.jpg
+processing  VOCfire/JPEGImages/00000782.jpg
+processing  VOCfire/JPEGImages/00000783.jpg
+processing  VOCfire/JPEGImages/00000784.jpg
+processing  VOCfire/JPEGImages/00000785.jpg
+processing  VOCfire/JPEGImages/00000786.jpg
+processing  VOCfire/JPEGImages/00000787.jpg
+processing  VOCfire/JPEGImages/00000788.jpg
+processing  VOCfire/JPEGImages/00000789.jpg
+processing  VOCfire/JPEGImages/00000790.jpg
+processing  VOCfire/JPEGImages/00000791.jpg
+processing  VOCfire/JPEGImages/00000792.jpg
+processing  VOCfire/JPEGImages/00000793.jpg
+processing  VOCfire/JPEGImages/00000794.jpg
+processing  VOCfire/JPEGImages/00000795.jpg
+processing  VOCfire/JPEGImages/00000796.jpg
+processing  VOCfire/JPEGImages/00000797.jpg
+processing  VOCfire/JPEGImages/00000798.jpg
+processing  VOCfire/JPEGImages/00000799.jpg
+processing  VOCfire/JPEGImages/00000800.jpg
+processing  VOCfire/JPEGImages/00000801.jpg
+processing  VOCfire/JPEGImages/00000802.jpg
+processing  VOCfire/JPEGImages/00000803.jpg
+processing  VOCfire/JPEGImages/00000804.jpg
+processing  VOCfire/JPEGImages/00000805.jpg
+processing  VOCfire/JPEGImages/00000806.jpg
+processing  VOCfire/JPEGImages/00000807.jpg
+processing  VOCfire/JPEGImages/00000808.jpg
+processing  VOCfire/JPEGImages/00000809.jpg
+processing  VOCfire/JPEGImages/00000810.jpg
+processing  VOCfire/JPEGImages/00000811.jpg
+processing  VOCfire/JPEGImages/00000812.jpg
+processing  VOCfire/JPEGImages/00000813.jpg
+processing  VOCfire/JPEGImages/00000814.jpg
+processing  VOCfire/JPEGImages/00000815.jpg
+processing  VOCfire/JPEGImages/00000816.jpg
+processing  VOCfire/JPEGImages/00000817.jpg
+processing  VOCfire/JPEGImages/00000818.jpg
+processing  VOCfire/JPEGImages/00000819.jpg
+processing  VOCfire/JPEGImages/00000820.jpg
+processing  VOCfire/JPEGImages/00000821.jpg
+processing  VOCfire/JPEGImages/00000822.jpg
+processing  VOCfire/JPEGImages/00000823.jpg
+processing  VOCfire/JPEGImages/00000824.jpg
+processing  VOCfire/JPEGImages/00000825.jpg
+processing  VOCfire/JPEGImages/00000826.jpg
+processing  VOCfire/JPEGImages/00000827.jpg
+processing  VOCfire/JPEGImages/00000828.jpg
+processing  VOCfire/JPEGImages/00000829.jpg
+processing  VOCfire/JPEGImages/00000830.jpg
+processing  VOCfire/JPEGImages/00000831.jpg
+processing  VOCfire/JPEGImages/00000832.jpg
+processing  VOCfire/JPEGImages/00000833.jpg
+processing  VOCfire/JPEGImages/00000834.jpg
+processing  VOCfire/JPEGImages/00000835.jpg
+processing  VOCfire/JPEGImages/00000836.jpg
+processing  VOCfire/JPEGImages/00000837.jpg
+processing  VOCfire/JPEGImages/00000838.jpg
+processing  VOCfire/JPEGImages/00000839.jpg
+processing  VOCfire/JPEGImages/00000840.jpg
+processing  VOCfire/JPEGImages/00000841.jpg
+processing  VOCfire/JPEGImages/00000842.jpg
+processing  VOCfire/JPEGImages/00000843.jpg
+processing  VOCfire/JPEGImages/00000844.jpg
+processing  VOCfire/JPEGImages/00000845.jpg
+processing  VOCfire/JPEGImages/00000846.jpg
+processing  VOCfire/JPEGImages/00000847.jpg
+processing  VOCfire/JPEGImages/00000848.jpg
+processing  VOCfire/JPEGImages/00000849.jpg
+processing  VOCfire/JPEGImages/00000850.jpg
+processing  VOCfire/JPEGImages/00000851.jpg
+processing  VOCfire/JPEGImages/00000852.jpg
+processing  VOCfire/JPEGImages/00000853.jpg
+processing  VOCfire/JPEGImages/00000854.jpg
+processing  VOCfire/JPEGImages/00000855.jpg
+processing  VOCfire/JPEGImages/00000856.jpg
+processing  VOCfire/JPEGImages/00000857.jpg
+processing  VOCfire/JPEGImages/00000858.jpg
+processing  VOCfire/JPEGImages/00000859.jpg
+processing  VOCfire/JPEGImages/00000860.jpg
+processing  VOCfire/JPEGImages/00000861.jpg
+processing  VOCfire/JPEGImages/00000862.jpg
+processing  VOCfire/JPEGImages/00000863.jpg
+processing  VOCfire/JPEGImages/00000864.jpg
+processing  VOCfire/JPEGImages/00000865.jpg
+processing  VOCfire/JPEGImages/00000866.jpg
+processing  VOCfire/JPEGImages/00000867.jpg
+processing  VOCfire/JPEGImages/00000868.jpg
+processing  VOCfire/JPEGImages/00000869.jpg
+processing  VOCfire/JPEGImages/00000870.jpg
+processing  VOCfire/JPEGImages/00000871.jpg
+processing  VOCfire/JPEGImages/00000872.jpg
+processing  VOCfire/JPEGImages/00000873.jpg
+processing  VOCfire/JPEGImages/00000874.jpg
+processing  VOCfire/JPEGImages/00000875.jpg
+processing  VOCfire/JPEGImages/00000876.jpg
+processing  VOCfire/JPEGImages/00000877.jpg
+processing  VOCfire/JPEGImages/00000878.jpg
+processing  VOCfire/JPEGImages/00000879.jpg
+processing  VOCfire/JPEGImages/00000880.jpg
+processing  VOCfire/JPEGImages/00000881.jpg
+processing  VOCfire/JPEGImages/00000882.jpg
+processing  VOCfire/JPEGImages/00000883.jpg
+processing  VOCfire/JPEGImages/00000884.jpg
+processing  VOCfire/JPEGImages/00000885.jpg
+processing  VOCfire/JPEGImages/00000886.jpg
+processing  VOCfire/JPEGImages/00000887.jpg
+processing  VOCfire/JPEGImages/00000888.jpg
+processing  VOCfire/JPEGImages/00000889.jpg
+processing  VOCfire/JPEGImages/00000890.jpg
+processing  VOCfire/JPEGImages/00000891.jpg
+processing  VOCfire/JPEGImages/00000892.jpg
+processing  VOCfire/JPEGImages/00000893.jpg
+processing  VOCfire/JPEGImages/00000894.jpg
+processing  VOCfire/JPEGImages/00000895.jpg
+processing  VOCfire/JPEGImages/00000896.jpg
+processing  VOCfire/JPEGImages/00000897.jpg
+processing  VOCfire/JPEGImages/00000898.jpg
+processing  VOCfire/JPEGImages/00000899.jpg
+processing  VOCfire/JPEGImages/00000900.jpg
+processing  VOCfire/JPEGImages/00000901.jpg
+processing  VOCfire/JPEGImages/00000902.jpg
+processing  VOCfire/JPEGImages/00000903.jpg
+processing  VOCfire/JPEGImages/00000904.jpg
+processing  VOCfire/JPEGImages/00000905.jpg
+processing  VOCfire/JPEGImages/00000906.jpg
+processing  VOCfire/JPEGImages/00000907.jpg
+processing  VOCfire/JPEGImages/00000908.jpg
+processing  VOCfire/JPEGImages/00000909.jpg
+processing  VOCfire/JPEGImages/00000910.jpg
+processing  VOCfire/JPEGImages/00000911.jpg
+processing  VOCfire/JPEGImages/00000912.jpg
+processing  VOCfire/JPEGImages/00000913.jpg
+processing  VOCfire/JPEGImages/00000914.jpg
+processing  VOCfire/JPEGImages/00000915.jpg
+processing  VOCfire/JPEGImages/00000916.jpg
+processing  VOCfire/JPEGImages/00000917.jpg
+processing  VOCfire/JPEGImages/00000918.jpg
+processing  VOCfire/JPEGImages/00000919.jpg
+processing  VOCfire/JPEGImages/00000920.jpg
+processing  VOCfire/JPEGImages/00000921.jpg
+processing  VOCfire/JPEGImages/00000922.jpg
+processing  VOCfire/JPEGImages/00000923.jpg
+processing  VOCfire/JPEGImages/00000924.jpg
+processing  VOCfire/JPEGImages/00000925.jpg
+processing  VOCfire/JPEGImages/00000926.jpg
+processing  VOCfire/JPEGImages/00000927.jpg
+processing  VOCfire/JPEGImages/00000928.jpg
+processing  VOCfire/JPEGImages/00000929.jpg
+processing  VOCfire/JPEGImages/00000930.jpg
+processing  VOCfire/JPEGImages/00000931.jpg
+processing  VOCfire/JPEGImages/00000932.jpg
+processing  VOCfire/JPEGImages/00000933.jpg
+processing  VOCfire/JPEGImages/00000934.jpg
+processing  VOCfire/JPEGImages/00000935.jpg
+processing  VOCfire/JPEGImages/00000936.jpg
+processing  VOCfire/JPEGImages/00000937.jpg
+processing  VOCfire/JPEGImages/00000938.jpg
+processing  VOCfire/JPEGImages/00000939.jpg
+processing  VOCfire/JPEGImages/00000940.jpg
+processing  VOCfire/JPEGImages/00000941.jpg
+processing  VOCfire/JPEGImages/00000942.jpg
+processing  VOCfire/JPEGImages/00000943.jpg
+processing  VOCfire/JPEGImages/00000944.jpg
+processing  VOCfire/JPEGImages/00000945.jpg
+processing  VOCfire/JPEGImages/00000946.jpg
+processing  VOCfire/JPEGImages/00000947.jpg
+processing  VOCfire/JPEGImages/00000948.jpg
+processing  VOCfire/JPEGImages/00000949.jpg
+processing  VOCfire/JPEGImages/00000950.jpg
+processing  VOCfire/JPEGImages/00000951.jpg
+processing  VOCfire/JPEGImages/00000952.jpg
+processing  VOCfire/JPEGImages/00000953.jpg
+processing  VOCfire/JPEGImages/00000954.jpg
+processing  VOCfire/JPEGImages/00000955.jpg
+processing  VOCfire/JPEGImages/00000956.jpg
+processing  VOCfire/JPEGImages/00000957.jpg
+processing  VOCfire/JPEGImages/00000958.jpg
+processing  VOCfire/JPEGImages/00000959.jpg
+processing  VOCfire/JPEGImages/00000960.jpg
+processing  VOCfire/JPEGImages/00000961.jpg
+processing  VOCfire/JPEGImages/00000962.jpg
+processing  VOCfire/JPEGImages/00000963.jpg
+processing  VOCfire/JPEGImages/00000964.jpg
+processing  VOCfire/JPEGImages/00000965.jpg
+processing  VOCfire/JPEGImages/00000966.jpg
+processing  VOCfire/JPEGImages/00000967.jpg
+processing  VOCfire/JPEGImages/00000968.jpg
+processing  VOCfire/JPEGImages/00000969.jpg
+processing  VOCfire/JPEGImages/00000970.jpg
+processing  VOCfire/JPEGImages/00000971.jpg
+processing  VOCfire/JPEGImages/00000972.jpg
+processing  VOCfire/JPEGImages/00000973.jpg
+processing  VOCfire/JPEGImages/00000974.jpg
+processing  VOCfire/JPEGImages/00000975.jpg
+processing  VOCfire/JPEGImages/00000976.jpg
+processing  VOCfire/JPEGImages/00000977.jpg
+processing  VOCfire/JPEGImages/00000978.jpg
+processing  VOCfire/JPEGImages/00000979.jpg
+processing  VOCfire/JPEGImages/00000980.jpg
+processing  VOCfire/JPEGImages/00000981.jpg
+processing  VOCfire/JPEGImages/00000982.jpg
+processing  VOCfire/JPEGImages/00000983.jpg
+processing  VOCfire/JPEGImages/00000984.jpg
+processing  VOCfire/JPEGImages/00000985.jpg
+processing  VOCfire/JPEGImages/00000986.jpg
+processing  VOCfire/JPEGImages/00000987.jpg
+processing  VOCfire/JPEGImages/00000988.jpg
+processing  VOCfire/JPEGImages/00000989.jpg
+processing  VOCfire/JPEGImages/00000990.jpg
+processing  VOCfire/JPEGImages/00000991.jpg
+processing  VOCfire/JPEGImages/00000992.jpg
+processing  VOCfire/JPEGImages/00000993.jpg
+processing  VOCfire/JPEGImages/00000994.jpg
+processing  VOCfire/JPEGImages/00000995.jpg
+processing  VOCfire/JPEGImages/00000996.jpg
+processing  VOCfire/JPEGImages/00000997.jpg
+processing  VOCfire/JPEGImages/00000998.jpg
+processing  VOCfire/JPEGImages/00000999.jpg
+processing  VOCfire/JPEGImages/00001000.jpg
+processing  VOCfire/JPEGImages/00001001.jpg
+processing  VOCfire/JPEGImages/00001002.jpg
+processing  VOCfire/JPEGImages/00001003.jpg
+processing  VOCfire/JPEGImages/00001004.jpg
+processing  VOCfire/JPEGImages/00001005.jpg
+processing  VOCfire/JPEGImages/00001006.jpg
+processing  VOCfire/JPEGImages/00001007.jpg
+processing  VOCfire/JPEGImages/00001008.jpg
+processing  VOCfire/JPEGImages/00001009.jpg
+processing  VOCfire/JPEGImages/00001010.jpg
+processing  VOCfire/JPEGImages/00001011.jpg
+processing  VOCfire/JPEGImages/00001012.jpg
+processing  VOCfire/JPEGImages/00001013.jpg
+processing  VOCfire/JPEGImages/00001014.jpg
+processing  VOCfire/JPEGImages/00001015.jpg
+processing  VOCfire/JPEGImages/00001016.jpg
+processing  VOCfire/JPEGImages/00001017.jpg
+processing  VOCfire/JPEGImages/00001018.jpg
+processing  VOCfire/JPEGImages/00001019.jpg
+processing  VOCfire/JPEGImages/00001020.jpg
+processing  VOCfire/JPEGImages/00001021.jpg
+processing  VOCfire/JPEGImages/00001022.jpg
+processing  VOCfire/JPEGImages/00001023.jpg
+processing  VOCfire/JPEGImages/00001024.jpg
+processing  VOCfire/JPEGImages/00001025.jpg
+processing  VOCfire/JPEGImages/00001026.jpg
+processing  VOCfire/JPEGImages/00001027.jpg
+processing  VOCfire/JPEGImages/00001028.jpg
+processing  VOCfire/JPEGImages/00001029.jpg
+processing  VOCfire/JPEGImages/00001030.jpg
+processing  VOCfire/JPEGImages/00001031.jpg
+processing  VOCfire/JPEGImages/00001032.jpg
+processing  VOCfire/JPEGImages/00001033.jpg
+processing  VOCfire/JPEGImages/00001034.jpg
+processing  VOCfire/JPEGImages/00001035.jpg
+processing  VOCfire/JPEGImages/00001036.jpg
+processing  VOCfire/JPEGImages/00001037.jpg
+processing  VOCfire/JPEGImages/00001038.jpg
+processing  VOCfire/JPEGImages/00001039.jpg
+processing  VOCfire/JPEGImages/00001040.jpg
+processing  VOCfire/JPEGImages/00001041.jpg
+processing  VOCfire/JPEGImages/00001042.jpg
+processing  VOCfire/JPEGImages/00001043.jpg
+processing  VOCfire/JPEGImages/00001044.jpg
+processing  VOCfire/JPEGImages/00001045.jpg
+processing  VOCfire/JPEGImages/00001046.jpg
+processing  VOCfire/JPEGImages/00001047.jpg
+processing  VOCfire/JPEGImages/00001048.jpg
+processing  VOCfire/JPEGImages/00001049.jpg
+processing  VOCfire/JPEGImages/00001050.jpg
+processing  VOCfire/JPEGImages/00001051.jpg
+processing  VOCfire/JPEGImages/00001052.jpg
+processing  VOCfire/JPEGImages/00001053.jpg
+processing  VOCfire/JPEGImages/00001054.jpg
+processing  VOCfire/JPEGImages/00001055.jpg
+processing  VOCfire/JPEGImages/00001056.jpg
+processing  VOCfire/JPEGImages/00001057.jpg
+processing  VOCfire/JPEGImages/00001058.jpg
+processing  VOCfire/JPEGImages/00001059.jpg
+processing  VOCfire/JPEGImages/00001060.jpg
+processing  VOCfire/JPEGImages/00001061.jpg
+processing  VOCfire/JPEGImages/00001062.jpg
+processing  VOCfire/JPEGImages/00001063.jpg
+processing  VOCfire/JPEGImages/00001064.jpg
+processing  VOCfire/JPEGImages/00001065.jpg
+processing  VOCfire/JPEGImages/00001066.jpg
+processing  VOCfire/JPEGImages/00001067.jpg
+processing  VOCfire/JPEGImages/00001068.jpg
+processing  VOCfire/JPEGImages/00001069.jpg
+processing  VOCfire/JPEGImages/00001070.jpg
+processing  VOCfire/JPEGImages/00001071.jpg
+processing  VOCfire/JPEGImages/00001072.jpg
+processing  VOCfire/JPEGImages/00001073.jpg
+processing  VOCfire/JPEGImages/00001074.jpg
+processing  VOCfire/JPEGImages/00001075.jpg
+processing  VOCfire/JPEGImages/00001076.jpg
+processing  VOCfire/JPEGImages/00001077.jpg
+processing  VOCfire/JPEGImages/00001078.jpg
+processing  VOCfire/JPEGImages/00001079.jpg
+processing  VOCfire/JPEGImages/00001080.jpg
+processing  VOCfire/JPEGImages/00001081.jpg
+processing  VOCfire/JPEGImages/00001082.jpg
+processing  VOCfire/JPEGImages/00001083.jpg
+processing  VOCfire/JPEGImages/00001084.jpg
+processing  VOCfire/JPEGImages/00001085.jpg
+processing  VOCfire/JPEGImages/00001086.jpg
+processing  VOCfire/JPEGImages/00001087.jpg
+processing  VOCfire/JPEGImages/00001088.jpg
+processing  VOCfire/JPEGImages/00001089.jpg
+processing  VOCfire/JPEGImages/00001090.jpg
+processing  VOCfire/JPEGImages/00001091.jpg
+processing  VOCfire/JPEGImages/00001092.jpg
+processing  VOCfire/JPEGImages/00001093.jpg
+processing  VOCfire/JPEGImages/00001094.jpg
+processing  VOCfire/JPEGImages/00001095.jpg
+processing  VOCfire/JPEGImages/00001096.jpg
+processing  VOCfire/JPEGImages/00001097.jpg
+processing  VOCfire/JPEGImages/00001098.jpg
+processing  VOCfire/JPEGImages/00001099.jpg
+processing  VOCfire/JPEGImages/00001100.jpg
+processing  VOCfire/JPEGImages/00001101.jpg
+processing  VOCfire/JPEGImages/00001102.jpg
+processing  VOCfire/JPEGImages/00001103.jpg
+processing  VOCfire/JPEGImages/00001104.jpg
+processing  VOCfire/JPEGImages/00001105.jpg
+processing  VOCfire/JPEGImages/00001106.jpg
+processing  VOCfire/JPEGImages/00001107.jpg
+processing  VOCfire/JPEGImages/00001108.jpg
+processing  VOCfire/JPEGImages/00001109.jpg
+processing  VOCfire/JPEGImages/00001110.jpg
+processing  VOCfire/JPEGImages/00001111.jpg
+processing  VOCfire/JPEGImages/00001112.jpg
+processing  VOCfire/JPEGImages/00001113.jpg
+processing  VOCfire/JPEGImages/00001114.jpg
+processing  VOCfire/JPEGImages/00001115.jpg
+processing  VOCfire/JPEGImages/00001116.jpg
+processing  VOCfire/JPEGImages/00001117.jpg
+processing  VOCfire/JPEGImages/00001118.jpg
+processing  VOCfire/JPEGImages/00001119.jpg
+processing  VOCfire/JPEGImages/00001120.jpg
+processing  VOCfire/JPEGImages/00001121.jpg
+processing  VOCfire/JPEGImages/00001122.jpg
+processing  VOCfire/JPEGImages/00001123.jpg
+processing  VOCfire/JPEGImages/00001124.jpg
+processing  VOCfire/JPEGImages/00001125.jpg
+processing  VOCfire/JPEGImages/00001126.jpg
+processing  VOCfire/JPEGImages/00001127.jpg
+processing  VOCfire/JPEGImages/00001128.jpg
+processing  VOCfire/JPEGImages/00001129.jpg
+processing  VOCfire/JPEGImages/00001130.jpg
+processing  VOCfire/JPEGImages/00001131.jpg
+processing  VOCfire/JPEGImages/00001132.jpg
+processing  VOCfire/JPEGImages/00001133.jpg
+processing  VOCfire/JPEGImages/00001134.jpg
+processing  VOCfire/JPEGImages/00001135.jpg
+processing  VOCfire/JPEGImages/00001136.jpg
+processing  VOCfire/JPEGImages/00001137.jpg
+processing  VOCfire/JPEGImages/00001138.jpg
+processing  VOCfire/JPEGImages/00001139.jpg
+processing  VOCfire/JPEGImages/00001140.jpg
+processing  VOCfire/JPEGImages/00001141.jpg
+processing  VOCfire/JPEGImages/00001142.jpg
+processing  VOCfire/JPEGImages/00001143.jpg
+processing  VOCfire/JPEGImages/00001144.jpg
+processing  VOCfire/JPEGImages/00001145.jpg
+processing  VOCfire/JPEGImages/00001146.jpg
+processing  VOCfire/JPEGImages/00001147.jpg
+processing  VOCfire/JPEGImages/00001148.jpg
+processing  VOCfire/JPEGImages/00001149.jpg
+processing  VOCfire/JPEGImages/00001150.jpg
+processing  VOCfire/JPEGImages/00001151.jpg
+processing  VOCfire/JPEGImages/00001152.jpg
+processing  VOCfire/JPEGImages/00001153.jpg
+processing  VOCfire/JPEGImages/00001154.jpg
+processing  VOCfire/JPEGImages/00001155.jpg
+processing  VOCfire/JPEGImages/00001156.jpg
+processing  VOCfire/JPEGImages/00001157.jpg
+processing  VOCfire/JPEGImages/00001158.jpg
+processing  VOCfire/JPEGImages/00001159.jpg
+processing  VOCfire/JPEGImages/00001160.jpg
+processing  VOCfire/JPEGImages/00001161.jpg
+processing  VOCfire/JPEGImages/00001162.jpg
+processing  VOCfire/JPEGImages/00001163.jpg
+processing  VOCfire/JPEGImages/00001164.jpg
+processing  VOCfire/JPEGImages/00001165.jpg
+processing  VOCfire/JPEGImages/00001166.jpg
+processing  VOCfire/JPEGImages/00001167.jpg
+processing  VOCfire/JPEGImages/00001168.jpg
+processing  VOCfire/JPEGImages/00001169.jpg
+processing  VOCfire/JPEGImages/00001170.jpg
+processing  VOCfire/JPEGImages/00001171.jpg
+processing  VOCfire/JPEGImages/00001172.jpg
+processing  VOCfire/JPEGImages/00001173.jpg
+processing  VOCfire/JPEGImages/00001174.jpg
+processing  VOCfire/JPEGImages/00001175.jpg
+processing  VOCfire/JPEGImages/00001176.jpg
+processing  VOCfire/JPEGImages/00001177.jpg
+processing  VOCfire/JPEGImages/00001178.jpg
+processing  VOCfire/JPEGImages/00001179.jpg
+processing  VOCfire/JPEGImages/00001180.jpg
+processing  VOCfire/JPEGImages/00001181.jpg
+processing  VOCfire/JPEGImages/00001182.jpg
+processing  VOCfire/JPEGImages/00001183.jpg
+processing  VOCfire/JPEGImages/00001184.jpg
+processing  VOCfire/JPEGImages/00001185.jpg
+processing  VOCfire/JPEGImages/00001186.jpg
+processing  VOCfire/JPEGImages/00001187.jpg
+processing  VOCfire/JPEGImages/00001188.jpg
+processing  VOCfire/JPEGImages/00001189.jpg
+processing  VOCfire/JPEGImages/00001190.jpg
+processing  VOCfire/JPEGImages/00001191.jpg
+processing  VOCfire/JPEGImages/00001192.jpg
+processing  VOCfire/JPEGImages/00001193.jpg
+processing  VOCfire/JPEGImages/00001194.jpg
+processing  VOCfire/JPEGImages/00001195.jpg
+processing  VOCfire/JPEGImages/00001196.jpg
+processing  VOCfire/JPEGImages/00001197.jpg
+processing  VOCfire/JPEGImages/00001198.jpg
+processing  VOCfire/JPEGImages/00001199.jpg
+processing  VOCfire/JPEGImages/00001200.jpg
+processing  VOCfire/JPEGImages/00001201.jpg
+processing  VOCfire/JPEGImages/00001202.jpg
+processing  VOCfire/JPEGImages/00001203.jpg
+processing  VOCfire/JPEGImages/00001204.jpg
+processing  VOCfire/JPEGImages/00001205.jpg
+processing  VOCfire/JPEGImages/00001206.jpg
+processing  VOCfire/JPEGImages/00001207.jpg
+processing  VOCfire/JPEGImages/00001208.jpg
+processing  VOCfire/JPEGImages/00001209.jpg
+processing  VOCfire/JPEGImages/00001210.jpg
+processing  VOCfire/JPEGImages/00001211.jpg
+processing  VOCfire/JPEGImages/00001212.jpg
+processing  VOCfire/JPEGImages/00001213.jpg
+processing  VOCfire/JPEGImages/00001214.jpg
+processing  VOCfire/JPEGImages/00001215.jpg
+processing  VOCfire/JPEGImages/00001216.jpg
+processing  VOCfire/JPEGImages/00001217.jpg
+processing  VOCfire/JPEGImages/00001218.jpg
+processing  VOCfire/JPEGImages/00001219.jpg
+processing  VOCfire/JPEGImages/00001220.jpg
+processing  VOCfire/JPEGImages/00001221.jpg
+processing  VOCfire/JPEGImages/00001222.jpg
+processing  VOCfire/JPEGImages/00001223.jpg
+processing  VOCfire/JPEGImages/00001224.jpg
+processing  VOCfire/JPEGImages/00001225.jpg
+processing  VOCfire/JPEGImages/00001226.jpg
+processing  VOCfire/JPEGImages/00001227.jpg
+processing  VOCfire/JPEGImages/00001228.jpg
+processing  VOCfire/JPEGImages/00001229.jpg
+processing  VOCfire/JPEGImages/00001230.jpg
+processing  VOCfire/JPEGImages/00001231.jpg
+processing  VOCfire/JPEGImages/00001232.jpg
+processing  VOCfire/JPEGImages/00001233.jpg
+processing  VOCfire/JPEGImages/00001234.jpg
+processing  VOCfire/JPEGImages/00001235.jpg
+processing  VOCfire/JPEGImages/00001236.jpg
+processing  VOCfire/JPEGImages/00001237.jpg
+processing  VOCfire/JPEGImages/00001238.jpg
+processing  VOCfire/JPEGImages/00001239.jpg
+processing  VOCfire/JPEGImages/00001240.jpg
+processing  VOCfire/JPEGImages/00001241.jpg
+processing  VOCfire/JPEGImages/00001242.jpg
+processing  VOCfire/JPEGImages/00001243.jpg
+processing  VOCfire/JPEGImages/00001244.jpg
+processing  VOCfire/JPEGImages/00001245.jpg
+processing  VOCfire/JPEGImages/00001246.jpg
+processing  VOCfire/JPEGImages/00001247.jpg
+processing  VOCfire/JPEGImages/00001248.jpg
+processing  VOCfire/JPEGImages/00001249.jpg
+processing  VOCfire/JPEGImages/00001250.jpg
+processing  VOCfire/JPEGImages/00001251.jpg
+processing  VOCfire/JPEGImages/00001252.jpg
+processing  VOCfire/JPEGImages/00001253.jpg
+processing  VOCfire/JPEGImages/00001254.jpg
+processing  VOCfire/JPEGImages/00001255.jpg
+processing  VOCfire/JPEGImages/00001256.jpg
+processing  VOCfire/JPEGImages/00001257.jpg
+processing  VOCfire/JPEGImages/00001258.jpg
+processing  VOCfire/JPEGImages/00001259.jpg
+processing  VOCfire/JPEGImages/00001260.jpg
+processing  VOCfire/JPEGImages/00001261.jpg
+processing  VOCfire/JPEGImages/00001262.jpg
+processing  VOCfire/JPEGImages/00001263.jpg
+processing  VOCfire/JPEGImages/00001264.jpg
+processing  VOCfire/JPEGImages/00001265.jpg
+processing  VOCfire/JPEGImages/00001266.jpg
+processing  VOCfire/JPEGImages/00001267.jpg
+processing  VOCfire/JPEGImages/00001268.jpg
+processing  VOCfire/JPEGImages/00001269.jpg
+processing  VOCfire/JPEGImages/00001270.jpg
+processing  VOCfire/JPEGImages/00001271.jpg
+processing  VOCfire/JPEGImages/00001272.jpg
+processing  VOCfire/JPEGImages/00001273.jpg
+processing  VOCfire/JPEGImages/00001274.jpg
+processing  VOCfire/JPEGImages/00001275.jpg
+processing  VOCfire/JPEGImages/00001276.jpg
+processing  VOCfire/JPEGImages/00001277.jpg
+processing  VOCfire/JPEGImages/00001278.jpg
+processing  VOCfire/JPEGImages/00001279.jpg
+processing  VOCfire/JPEGImages/00001280.jpg
+processing  VOCfire/JPEGImages/00001281.jpg
+processing  VOCfire/JPEGImages/00001282.jpg
+processing  VOCfire/JPEGImages/00001283.jpg
+processing  VOCfire/JPEGImages/00001284.jpg
+processing  VOCfire/JPEGImages/00001285.jpg
+processing  VOCfire/JPEGImages/00001286.jpg
+processing  VOCfire/JPEGImages/00001287.jpg
+processing  VOCfire/JPEGImages/00001288.jpg
+processing  VOCfire/JPEGImages/00001289.jpg
+processing  VOCfire/JPEGImages/00001290.jpg
+processing  VOCfire/JPEGImages/00001291.jpg
+processing  VOCfire/JPEGImages/00001292.jpg
+processing  VOCfire/JPEGImages/00001293.jpg
+processing  VOCfire/JPEGImages/00001294.jpg
+processing  VOCfire/JPEGImages/00001295.jpg
+processing  VOCfire/JPEGImages/00001296.jpg
+processing  VOCfire/JPEGImages/00001297.jpg
+processing  VOCfire/JPEGImages/00001298.jpg
+processing  VOCfire/JPEGImages/00001299.jpg
+processing  VOCfire/JPEGImages/00001300.jpg
+processing  VOCfire/JPEGImages/00001301.jpg
+processing  VOCfire/JPEGImages/00001302.jpg
+processing  VOCfire/JPEGImages/00001303.jpg
+processing  VOCfire/JPEGImages/00001304.jpg
+processing  VOCfire/JPEGImages/00001305.jpg
+processing  VOCfire/JPEGImages/00001306.jpg
+processing  VOCfire/JPEGImages/00001307.jpg
+processing  VOCfire/JPEGImages/00001308.jpg
+processing  VOCfire/JPEGImages/00001309.jpg
+processing  VOCfire/JPEGImages/00001310.jpg
+processing  VOCfire/JPEGImages/00001311.jpg
+processing  VOCfire/JPEGImages/00001312.jpg
+processing  VOCfire/JPEGImages/00001313.jpg
+processing  VOCfire/JPEGImages/00001314.jpg
+processing  VOCfire/JPEGImages/00001315.jpg
+processing  VOCfire/JPEGImages/00001316.jpg
+processing  VOCfire/JPEGImages/00001317.jpg
+processing  VOCfire/JPEGImages/00001318.jpg
+processing  VOCfire/JPEGImages/00001319.jpg
+processing  VOCfire/JPEGImages/00001320.jpg
+processing  VOCfire/JPEGImages/00001321.jpg
+processing  VOCfire/JPEGImages/00001322.jpg
+processing  VOCfire/JPEGImages/00001323.jpg
+processing  VOCfire/JPEGImages/00001324.jpg
+processing  VOCfire/JPEGImages/00001325.jpg
+processing  VOCfire/JPEGImages/00001326.jpg
+processing  VOCfire/JPEGImages/00001327.jpg
+processing  VOCfire/JPEGImages/00001328.jpg
+processing  VOCfire/JPEGImages/00001329.jpg
+processing  VOCfire/JPEGImages/00001330.jpg
+processing  VOCfire/JPEGImages/00001331.jpg
+processing  VOCfire/JPEGImages/00001332.jpg
+processing  VOCfire/JPEGImages/00001333.jpg
+processing  VOCfire/JPEGImages/00001334.jpg
+processing  VOCfire/JPEGImages/00001335.jpg
+processing  VOCfire/JPEGImages/00001336.jpg
+processing  VOCfire/JPEGImages/00001337.jpg
+processing  VOCfire/JPEGImages/00001338.jpg
+processing  VOCfire/JPEGImages/00001339.jpg
+processing  VOCfire/JPEGImages/00001340.jpg
+processing  VOCfire/JPEGImages/00001341.jpg
+processing  VOCfire/JPEGImages/00001342.jpg
+processing  VOCfire/JPEGImages/00001343.jpg
+processing  VOCfire/JPEGImages/00001344.jpg
+processing  VOCfire/JPEGImages/00001345.jpg
+processing  VOCfire/JPEGImages/00001346.jpg
+processing  VOCfire/JPEGImages/00001347.jpg
+processing  VOCfire/JPEGImages/00001348.jpg
+processing  VOCfire/JPEGImages/00001349.jpg
+processing  VOCfire/JPEGImages/00001350.jpg
+processing  VOCfire/JPEGImages/00001351.jpg
+processing  VOCfire/JPEGImages/00001352.jpg
+processing  VOCfire/JPEGImages/00001353.jpg
+processing  VOCfire/JPEGImages/00001354.jpg
+processing  VOCfire/JPEGImages/00001355.jpg
+processing  VOCfire/JPEGImages/00001356.jpg
+processing  VOCfire/JPEGImages/00001357.jpg
+processing  VOCfire/JPEGImages/00001358.jpg
+processing  VOCfire/JPEGImages/00001359.jpg
+processing  VOCfire/JPEGImages/00001360.jpg
+processing  VOCfire/JPEGImages/00001361.jpg
+processing  VOCfire/JPEGImages/00001362.jpg
+processing  VOCfire/JPEGImages/00001363.jpg
+processing  VOCfire/JPEGImages/00001364.jpg
+processing  VOCfire/JPEGImages/00001365.jpg
+processing  VOCfire/JPEGImages/00001366.jpg
+processing  VOCfire/JPEGImages/00001367.jpg
+processing  VOCfire/JPEGImages/00001368.jpg
+processing  VOCfire/JPEGImages/00001369.jpg
+processing  VOCfire/JPEGImages/00001370.jpg
+processing  VOCfire/JPEGImages/00001371.jpg
+processing  VOCfire/JPEGImages/00001372.jpg
+processing  VOCfire/JPEGImages/00001373.jpg
+processing  VOCfire/JPEGImages/00001374.jpg
+processing  VOCfire/JPEGImages/00001375.jpg
+processing  VOCfire/JPEGImages/00001376.jpg
+processing  VOCfire/JPEGImages/00001377.jpg
+processing  VOCfire/JPEGImages/00001378.jpg
+processing  VOCfire/JPEGImages/00001379.jpg
+processing  VOCfire/JPEGImages/00001380.jpg
+processing  VOCfire/JPEGImages/00001381.jpg
+processing  VOCfire/JPEGImages/00001382.jpg
+processing  VOCfire/JPEGImages/00001383.jpg
+processing  VOCfire/JPEGImages/00001384.jpg
+processing  VOCfire/JPEGImages/00001385.jpg
+processing  VOCfire/JPEGImages/00001386.jpg
+processing  VOCfire/JPEGImages/00001387.jpg
+processing  VOCfire/JPEGImages/00001388.jpg
+processing  VOCfire/JPEGImages/00001389.jpg
+processing  VOCfire/JPEGImages/00001390.jpg
+processing  VOCfire/JPEGImages/00001391.jpg
+processing  VOCfire/JPEGImages/00001392.jpg
+processing  VOCfire/JPEGImages/00001393.jpg
+processing  VOCfire/JPEGImages/00001394.jpg
+processing  VOCfire/JPEGImages/00001395.jpg
+processing  VOCfire/JPEGImages/00001396.jpg
+processing  VOCfire/JPEGImages/00001397.jpg
+processing  VOCfire/JPEGImages/00001398.jpg
+processing  VOCfire/JPEGImages/00001399.jpg
+processing  VOCfire/JPEGImages/00001400.jpg
+processing  VOCfire/JPEGImages/00001401.jpg
+processing  VOCfire/JPEGImages/00001402.jpg
+processing  VOCfire/JPEGImages/00001403.jpg
+processing  VOCfire/JPEGImages/00001404.jpg
+processing  VOCfire/JPEGImages/00001405.jpg
+processing  VOCfire/JPEGImages/00001406.jpg
+processing  VOCfire/JPEGImages/00001407.jpg
+processing  VOCfire/JPEGImages/00001408.jpg
+processing  VOCfire/JPEGImages/00001409.jpg
+processing  VOCfire/JPEGImages/00001410.jpg
+processing  VOCfire/JPEGImages/00001411.jpg
+processing  VOCfire/JPEGImages/00001412.jpg
+processing  VOCfire/JPEGImages/00001413.jpg
+processing  VOCfire/JPEGImages/00001414.jpg
+processing  VOCfire/JPEGImages/00001415.jpg
+processing  VOCfire/JPEGImages/00001416.jpg
+processing  VOCfire/JPEGImages/00001417.jpg
+processing  VOCfire/JPEGImages/00001418.jpg
+processing  VOCfire/JPEGImages/00001419.jpg
+processing  VOCfire/JPEGImages/00001420.jpg
+processing  VOCfire/JPEGImages/00001421.jpg
+processing  VOCfire/JPEGImages/00001422.jpg
+processing  VOCfire/JPEGImages/00001423.jpg
+processing  VOCfire/JPEGImages/00001424.jpg
+processing  VOCfire/JPEGImages/00001425.jpg
+processing  VOCfire/JPEGImages/00001426.jpg
+processing  VOCfire/JPEGImages/00001427.jpg
+processing  VOCfire/JPEGImages/00001428.jpg
+processing  VOCfire/JPEGImages/00001429.jpg
+processing  VOCfire/JPEGImages/00001430.jpg
+processing  VOCfire/JPEGImages/00001431.jpg
+processing  VOCfire/JPEGImages/00001432.jpg
+processing  VOCfire/JPEGImages/00001433.jpg
+processing  VOCfire/JPEGImages/00001434.jpg
+processing  VOCfire/JPEGImages/00001435.jpg
+processing  VOCfire/JPEGImages/00001436.jpg
+processing  VOCfire/JPEGImages/00001437.jpg
+processing  VOCfire/JPEGImages/00001438.jpg
+processing  VOCfire/JPEGImages/00001439.jpg
+processing  VOCfire/JPEGImages/00001440.jpg
+processing  VOCfire/JPEGImages/00001441.jpg
+processing  VOCfire/JPEGImages/00001442.jpg
+processing  VOCfire/JPEGImages/00001443.jpg
+processing  VOCfire/JPEGImages/00001444.jpg
+processing  VOCfire/JPEGImages/00001445.jpg
+processing  VOCfire/JPEGImages/00001446.jpg
+processing  VOCfire/JPEGImages/00001447.jpg
+processing  VOCfire/JPEGImages/00001448.jpg
+processing  VOCfire/JPEGImages/00001449.jpg
+processing  VOCfire/JPEGImages/00001450.jpg
+processing  VOCfire/JPEGImages/00001451.jpg
+processing  VOCfire/JPEGImages/00001452.jpg
+processing  VOCfire/JPEGImages/00001453.jpg
+processing  VOCfire/JPEGImages/00001454.jpg
+processing  VOCfire/JPEGImages/00001455.jpg
+processing  VOCfire/JPEGImages/00001456.jpg
+processing  VOCfire/JPEGImages/00001457.jpg
+processing  VOCfire/JPEGImages/00001458.jpg
+
+Process finished with exit code 0
+
+
+
+ssh://iot1@10.1.69.34:22/home/iot1/anaconda3/envs/py37/bin/python -u /home/iot1/sfz/examples_python34/fire_ult_yolov5_torch/01processdata_genyolodataset/01processdata_genVOC/01data2VOC.py
+in_dir: ../../../../datasets/od/fire
+VOCfire exist and delete
+makedirs: VOCfire/JPEGImages
+makedirs: VOCfire/Annotations
+makedirs: VOCfire/ImageSets/Main
+filepath_lists length  1458
+100%|███████████████████████████████████████| 1458/1458 [07:13<00:00,  3.36it/s]
+time use 433.633 s
+class_lists
+ ['0']
+class_lists length  1
+dict_class
+ {'0': 1658}
+process rawdataset to VOCdataset end !
+
+Process finished with exit code 0
+
+
+

@@ -1,0 +1,4 @@
+2021-12-02 07:07:15 [server-opencv] INFO [133] rec all params
+2021-12-02 07:07:15 [server-opencv] INFO [139] sp (512, 512, 3)
+2021-12-02 07:07:15 [server-opencv] INFO [177] out_img_cvnp.shape (512, 512, 3)
+2021-12-02 07:07:15 [server-opencv] INFO [200] test_status 1

@@ -1,0 +1,42 @@
+(testtest) iot1@ssduer:~/sfz/examples_python34/label_ult_yolov5_torch/01processdata_genyolodataset/01processdata_genVOC$ python3 01data2VOC.py
+in_dir: noiseaug_VOClabel
+VOClabel exist and delete
+makedirs: VOClabel/JPEGImages
+makedirs: VOClabel/Annotations
+makedirs: VOClabel/ImageSets/Main
+filepath_lists length  832
+100%|█████████████████████████████████████████████████████████████| 832/832 [23:15<00:00,  1.68s/it]
+time use 1402.118 s
+class_lists
+ ['180', '270', '0', '90']
+class_lists length  4
+dict_class
+ {'180': 223, '270': 223, '0': 223, '90': 223}
+process rawdataset to VOCdataset end !
+
+
+source activate ReID_py36
+(ReID_py36) [iot1@g33 ~/sfz/examples_python33/label_ult_yolov5_torch/02train_logo_ult_yolov5_torch]$ python train_label.py
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     97/99      1.5G  0.008606  0.006617  0.001747   0.01697        17       640: 100%|█| 37/37 [04:
+               Class      Images      Labels           P           R      mAP@.5  mAP@.5:.95: 100%|█
+                 all         250         264       0.999           1       0.996       0.961
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     98/99      1.5G  0.008629  0.006846  0.001479   0.01695        19       640: 100%|█| 37/37 [05:
+               Class      Images      Labels           P           R      mAP@.5  mAP@.5:.95: 100%|█
+                 all         250         264       0.999           1       0.996       0.964
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     99/99      1.5G  0.008649  0.006702  0.001538   0.01689        12       640: 100%|█| 37/37 [05:
+               Class      Images      Labels           P           R      mAP@.5  mAP@.5:.95: 100%|█
+                 all         250         264       0.999           1       0.996       0.964
+                 180         250          70       0.999           1       0.996       0.963
+                 270         250          72       0.999           1       0.996       0.979
+                   0         250          68       0.999           1       0.996       0.933
+                  90         250          54           1           1       0.996       0.979
+100 epochs completed in 9.659 hours.
+
+Optimizer stripped from runs-label/train-1021/exp11/weights/last.pt, 14.4MB
+Optimizer stripped from runs-label/train-1021/exp11/weights/best.pt, 14.4MB

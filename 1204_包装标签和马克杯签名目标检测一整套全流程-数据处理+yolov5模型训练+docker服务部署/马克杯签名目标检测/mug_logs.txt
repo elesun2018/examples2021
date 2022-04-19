@@ -1,0 +1,46 @@
+(ReID_py36) [iot1@g33 ~/sfz/examples_python33/mug_ult_yolov5_torch/01processdata_genyolodataset/01processdata_genVOC]$ python 01data2VOC.py
+in_dir: noiseaug_VOCmug
+VOCmug exist and delete
+makedirs: VOCmug/JPEGImages
+makedirs: VOCmug/Annotations
+makedirs: VOCmug/ImageSets/Main
+filepath_lists length  912
+100%|████████████████████████████████████████████████████████████| 912/912 [00:01<00:00, 586.21it/s]
+time use 1.585 s
+class_lists
+ ['0', '1']
+class_lists length  2
+dict_class
+ {'0': 503, '1': 407}
+process rawdataset to VOCdataset end !
+
+
+(ReID_py36) [iot1@g33 ~/sfz/examples_python33/mug_ult_yolov5_torch/01processdata_genyolodataset/02genyolodataset_convert2Yolo-fixed_voc]$ python 01voc2yololables.py
+
+VOC Parsing:   |████████████████████████████████████████| 100.0% (912/912)  Complete
+
+
+YOLO Generating:|████████████████████████████████████████| 100.0% (912/912)  Complete
+
+
+YOLO Saving:   |████████████████████████████████████████| 100.0% (912/912)  Complete
+
+(ReID_py36) [iot1@g33 ~/sfz/examples_python33/mug_ult_yolov5_torch/01processdata_genyolodataset/02genyolodataset_convert2Yolo-fixed_voc]$ python 02yolo2trainval.py
+processing set train
+100%|████████████████████████████████████████████████████████████| 638/638 [00:00<00:00, 715.90it/s]
+processing set val
+100%|████████████████████████████████████████████████████████████| 274/274 [00:00<00:00, 729.84it/s]
+processing set trainval
+100%|████████████████████████████████████████████████████████████| 912/912 [00:01<00:00, 724.53it/s]
+VOCmug2yolo/labels generated !
+VOCmug2yolo/images generated !
+总共耗时：2.5476038455963135s
+(ReID_py36) [iot1@g33 ~/sfz/examples_python33/mug_ult_yolov5_torch/01processdata_genyolodataset/02genyolodataset_convert2Yolo-fixed_voc]$ python 03yolo2box.py
+100%|█████████████████████████████████████████████████████████████| 912/912 [04:21<00:00,  3.49it/s]
+time use 261.334 s
+
+
+
+$ nohup python train_mug.py >log 2>&1 &
+
+
