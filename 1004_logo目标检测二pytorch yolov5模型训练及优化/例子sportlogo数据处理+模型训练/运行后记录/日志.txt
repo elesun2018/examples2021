@@ -1,0 +1,604 @@
+ssh://root@10.1.68.152:22/home/wk/soft/miniconda3/envs/testtest/bin/python -u /home/wk/examples_python152/processdata_genyolodataset/01processdata_genVOC/01data2VOC.py
+in_dir: ../../../datasets/od/sportlogo
+VOCsport exist and delete
+makedirs: VOCsport/JPEGImages
+makedirs: VOCsport/Annotations
+makedirs: VOCsport/ImageSets/Main
+filepath_lists length  2038
+100%|██████████████████████████████████████| 2038/2038 [00:04<00:00, 494.69it/s]
+time use 4.164 s
+class_lists
+ ['puma', 'adidas', 'kappa', '361', 'xtep', 'anta', 'lining', 'erke', 'nb', 'nike']
+class_lists length  10
+dict_class
+ {'puma': 284, 'adidas': 363, 'kappa': 327, '361': 321, 'xtep': 356, 'anta': 271, 'lining': 274, 'erke': 283, 'nb': 270, 'nike': 288}
+process rawdataset to VOCdataset end !
+
+Process finished with exit code 0
+
+
+ssh://root@10.1.68.152:22/home/wk/soft/miniconda3/envs/testtest/bin/python -u /home/wk/examples_python152/logo_ult_yolov5_torch/train_sport.py
+YOLOv5 🚀  torch 1.7.0+cu101 CUDA:0 (Tesla P100-PCIE-16GB, 16280.875MB)
+                            CUDA:1 (Tesla P100-PCIE-16GB, 16280.875MB)
+
+Namespace(adam=False, artifact_alias='latest', batch_size=32, bbox_interval=-1, bucket='', cache_images=False, cfg='models/yolov5s.yaml', data='data/sport.yaml', device='', entity=None, epochs=100, evolve=False, exist_ok=False, global_rank=-1, hyp='data/hyp.scratch.yaml', image_weights=False, img_size=[640, 640], linear_lr=False, local_rank=-1, multi_scale=False, name='exp', noautoanchor=False, nosave=False, notest=False, project='runs-sport/train-0821', quad=False, rect=False, resume=False, save_dir='runs-sport/train-0821/exp', save_period=-1, single_cls=False, sync_bn=False, total_batch_size=32, upload_dataset=False, weights='weights/yolov5s.pt', workers=0, world_size=1)
+tensorboard: Start with 'tensorboard --logdir runs-sport/train-0821', view at http://localhost:6006/
+hyperparameters: lr0=0.01, lrf=0.2, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=0.05, cls=0.5, cls_pw=1.0, obj=1.0, obj_pw=1.0, iou_t=0.2, anchor_t=4.0, anchors=3, fl_gamma=0.0, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, mosaic=1.0, mixup=0.0
+wandb: Install Weights & Biases for YOLOv5 logging with 'pip install wandb' (recommended)
+Overriding model.yaml nc=80 with nc=10
+Overriding model.yaml anchors with anchors=3
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1      3520  models.common.Focus                     [3, 32, 3]                    
+  1                -1  1     18560  models.common.Conv                      [32, 64, 3, 2]                
+  2                -1  1     18816  models.common.C3                        [64, 64, 1]                   
+  3                -1  1     73984  models.common.Conv                      [64, 128, 3, 2]               
+  4                -1  1    156928  models.common.C3                        [128, 128, 3]                 
+  5                -1  1    295424  models.common.Conv                      [128, 256, 3, 2]              
+  6                -1  1    625152  models.common.C3                        [256, 256, 3]                 
+  7                -1  1   1180672  models.common.Conv                      [256, 512, 3, 2]              
+  8                -1  1    656896  models.common.SPP                       [512, 512, [5, 9, 13]]        
+  9                -1  1   1182720  models.common.C3                        [512, 512, 1, False]          
+ 10                -1  1    131584  models.common.Conv                      [512, 256, 1, 1]              
+ 11                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 12           [-1, 6]  1         0  models.common.Concat                    [1]                           
+ 13                -1  1    361984  models.common.C3                        [512, 256, 1, False]          
+ 14                -1  1     33024  models.common.Conv                      [256, 128, 1, 1]              
+ 15                -1  1         0  torch.nn.modules.upsampling.Upsample    [None, 2, 'nearest']          
+ 16           [-1, 4]  1         0  models.common.Concat                    [1]                           
+ 17                -1  1     90880  models.common.C3                        [256, 128, 1, False]          
+ 18                -1  1    147712  models.common.Conv                      [128, 128, 3, 2]              
+ 19          [-1, 14]  1         0  models.common.Concat                    [1]                           
+ 20                -1  1    296448  models.common.C3                        [256, 256, 1, False]          
+ 21                -1  1    590336  models.common.Conv                      [256, 256, 3, 2]              
+ 22          [-1, 10]  1         0  models.common.Concat                    [1]                           
+ 23                -1  1   1182720  models.common.C3                        [512, 512, 1, False]          
+ 24      [17, 20, 23]  1     40455  models.yolo.Detect                      [10, [[0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]], [128, 256, 512]]
+/home/wk/soft/miniconda3/envs/testtest/lib/python3.6/site-packages/torch/nn/functional.py:1639: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+Model Summary: 283 layers, 7087815 parameters, 7087815 gradients, 16.5 GFLOPS
+
+Transferred 354/362 items from weights/yolov5s.pt
+Scaled weight_decay = 0.0005
+Optimizer groups: 62 .bias, 62 conv.weight, 59 other
+Scanning images:   0%|                                 | 0/1426 [00:00<?, ?it/s]train: WARNING: Ignoring corrupted image and/or label ../../datasets/od/VOCsport2yolo/images/train/00000174.jpg: duplicate labels
+train: Scanning '../../datasets/od/VOCsport2yolo/labels/train' images and labelstrain: WARNING: Ignoring corrupted image and/or label ../../datasets/od/VOCsport2yolo/images/train/00001123.jpg: duplicate labels
+train: Scanning '../../datasets/od/VOCsport2yolo/labels/train' images and labels
+train: New cache created: ../../datasets/od/VOCsport2yolo/labels/train.cache
+val: Scanning '../../datasets/od/VOCsport2yolo/labels/val' images and labels... val: WARNING: Ignoring corrupted image and/or label ../../datasets/od/VOCsport2yolo/images/val/00001747.jpg: duplicate labels
+val: Scanning '../../datasets/od/VOCsport2yolo/labels/val' images and labels... 
+val: New cache created: ../../datasets/od/VOCsport2yolo/labels/val.cache
+Plotting labels... 
+
+autoanchor: Analyzing anchors... anchors/target = 0.05, Best Possible Recall (BPR) = 0.0160. Attempting to improve anchors, please wait...
+autoanchor: Running kmeans for 9 anchors on 2125 points...
+autoanchor: thr=0.25: 0.9986 best possible recall, 6.10 anchors past thr
+autoanchor: n=9, img_size=640, metric_all=0.394/0.784-mean/best, past_thr=0.508-mean: 27,19,  51,33,  75,51,  112,70,  70,116,  199,67,  164,111,  294,189,  504,295
+autoanchor: Evolving anchors with Genetic Algorithm: fitness = 0.7921: 100%|█| 1
+autoanchor: thr=0.25: 0.9986 best possible recall, 6.51 anchors past thr
+autoanchor: n=9, img_size=640, metric_all=0.415/0.792-mean/best, past_thr=0.512-mean: 28,20,  46,32,  68,46,  60,103,  99,66,  161,54,  147,91,  232,148,  438,260
+autoanchor: New anchors saved to model. Update model *.yaml to use these anchors in the future.
+
+fl_gamma 0.0
+Image sizes 640 train, 640 test
+Using 0 dataloader workers
+Logging results to runs-sport/train-0821/exp
+Starting training for 100 epochs...
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+  0%|                                                    | 0/45 [00:00<?, ?it/s]/home/wk/soft/miniconda3/envs/testtest/lib/python3.6/site-packages/torch/nn/functional.py:1639: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+      0/99     5.02G    0.1145   0.02634   0.06671    0.2076        41       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906    0.000662       0.126    0.000149    2.49e-05
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      1/99     5.03G   0.09591   0.02784   0.06322     0.187        46       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906     0.00544       0.033     0.00292    0.000672
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      2/99     5.03G   0.07455   0.03217   0.06037    0.1671        38       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906      0.0609       0.111      0.0465      0.0117
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      3/99     5.03G   0.05988   0.03057   0.05789    0.1483        36       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.143       0.369       0.145      0.0572
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      4/99     5.03G   0.05564   0.02513   0.05403    0.1348        44       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.377       0.344       0.288       0.124
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      5/99     5.03G   0.05367   0.02259     0.048    0.1243        37       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.399       0.468       0.388       0.178
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      6/99     5.03G    0.0528    0.0208   0.04035     0.114        45       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.479       0.521        0.47       0.206
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      7/99     5.03G   0.05151   0.01953   0.03244    0.1035        45       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.473       0.565       0.489       0.208
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      8/99     5.03G   0.05073   0.01877    0.0269    0.0964        33       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.539       0.601       0.567       0.238
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+      9/99     5.03G   0.04915   0.01735   0.02277   0.08927        33       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.596       0.552       0.578       0.245
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     10/99     5.03G   0.04812   0.01754   0.01856   0.08422        43       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.628       0.598       0.617       0.278
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     11/99     5.03G   0.05583   0.01646   0.01636   0.08865        41       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.439       0.681        0.56       0.209
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     12/99     5.03G   0.05241   0.01655   0.01471   0.08367        37       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906        0.63       0.635       0.671       0.321
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     13/99     5.03G   0.05287   0.01666   0.01352   0.08305        46       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.589       0.663       0.637       0.268
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     14/99     5.03G   0.04867   0.01728   0.01281   0.07875        48       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.682       0.679       0.702        0.35
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     15/99     5.03G   0.04812   0.01632   0.01152   0.07597        42       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.703       0.669       0.725        0.32
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     16/99     5.03G    0.0462   0.01663   0.01065   0.07348        34       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906        0.69       0.682       0.713       0.354
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     17/99     5.03G   0.04562   0.01684   0.01049   0.07295        27       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.666       0.645       0.663       0.293
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     18/99     5.03G   0.04246   0.01654   0.01067   0.06967        45       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.844       0.665       0.753       0.389
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     19/99     5.03G   0.04253   0.01666  0.009936   0.06913        61       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.801       0.637       0.717        0.37
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     20/99     5.03G   0.04253   0.01716   0.01046   0.07015        37       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.839       0.611       0.721        0.38
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     21/99     5.03G   0.04212   0.01686   0.01056   0.06954        36       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.762       0.653       0.703       0.378
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     22/99     5.03G   0.04078   0.01795   0.01064   0.06937        30       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.817       0.668       0.751       0.398
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     23/99     5.03G    0.0397   0.01741   0.01094   0.06805        34       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.855       0.626       0.736       0.377
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     24/99     5.03G   0.03922    0.0172  0.009848   0.06627        44       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.845       0.706       0.795       0.439
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     25/99     5.03G   0.03897   0.01675  0.008328   0.06404        30       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.806       0.742       0.802       0.449
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     26/99     5.03G   0.03695   0.01603  0.008131   0.06111        40       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.785       0.686        0.74       0.396
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     27/99     5.03G   0.03645   0.01564  0.007521    0.0596        33       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.873       0.739       0.823        0.47
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     28/99     5.03G   0.03548   0.01567  0.007736   0.05889        30       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.875       0.711       0.828       0.469
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     29/99     5.03G   0.03556   0.01583  0.006642   0.05803        31       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.868       0.777       0.858       0.465
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     30/99     5.03G   0.03509   0.01579  0.006816   0.05769        41       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906        0.92       0.744       0.846       0.496
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     31/99     5.03G   0.03489    0.0153  0.006446   0.05663        40       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.868       0.733       0.823       0.453
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     32/99     5.03G   0.03256   0.01477  0.005458   0.05279        38       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.902       0.802       0.869       0.515
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     33/99     5.03G   0.03321   0.01431  0.005236   0.05276        35       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.893        0.76        0.84       0.501
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     34/99     5.03G   0.03264   0.01442   0.00499   0.05205        39       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.865        0.81        0.86       0.495
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     35/99     5.03G   0.03197   0.01429  0.004917   0.05118        41       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906         0.9       0.821       0.878       0.516
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     36/99     5.03G   0.03177    0.0141  0.004957   0.05082        41       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.927       0.795       0.887       0.532
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     37/99     5.03G   0.03082   0.01372  0.004281   0.04882        37       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.927        0.77       0.889       0.542
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     38/99     5.03G   0.03131   0.01359  0.004213   0.04911        44       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.893       0.806       0.874        0.53
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     39/99     5.03G   0.03077   0.01342  0.004502   0.04869        35       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.904       0.826       0.888       0.536
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     40/99     5.03G   0.03037   0.01394  0.003886   0.04821        56       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.891       0.833        0.88       0.543
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     41/99     5.03G   0.03048   0.01372  0.003915   0.04812        43       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.906       0.816        0.89       0.541
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     42/99     5.03G   0.02962   0.01322  0.003819   0.04665        35       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.902       0.824       0.882        0.53
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     43/99     5.03G    0.0287   0.01319  0.003916    0.0458        43       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.915       0.801        0.87       0.549
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     44/99     5.03G    0.0284   0.01328  0.003417    0.0451        44       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.885       0.832       0.889       0.548
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     45/99     5.03G   0.02849   0.01345  0.003557   0.04549        72       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.902       0.841       0.888       0.559
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     46/99     5.03G   0.02798   0.01303  0.003294   0.04431        44       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.924       0.832       0.889       0.552
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     47/99     5.03G   0.02842   0.01258  0.003602    0.0446        35       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.871       0.838       0.874       0.543
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     48/99     5.03G   0.02696   0.01279  0.003284   0.04303        47       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906        0.94       0.833       0.902       0.567
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     49/99     5.03G   0.02716   0.01292  0.003085   0.04316        50       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.911       0.828       0.882       0.552
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     50/99     5.03G   0.02683   0.01204  0.002927   0.04179        40       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.901       0.842        0.89       0.567
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     51/99     5.03G    0.0263   0.01209   0.00291   0.04131        43       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.897       0.855       0.899       0.564
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     52/99     5.03G   0.02651   0.01198  0.002957   0.04144        37       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.923       0.829       0.897       0.555
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     53/99     5.03G   0.02657   0.01259  0.002806   0.04197        44       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.873       0.851       0.878       0.551
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     54/99     5.03G   0.02643   0.01226  0.002595   0.04129        45       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.895       0.846       0.899       0.564
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     55/99     5.03G   0.02629   0.01198  0.002778   0.04104        50       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.902       0.845       0.892        0.57
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     56/99     5.03G   0.02525   0.01197  0.002343   0.03956        36       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906        0.93       0.809       0.888       0.557
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     57/99     5.03G   0.02533   0.01181  0.002587   0.03973        35       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.921       0.821       0.887       0.566
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     58/99     5.03G   0.02472   0.01201  0.002483   0.03921        43       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.902       0.831       0.886       0.569
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     59/99     5.03G   0.02524   0.01216  0.002318   0.03972        38       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.905       0.847       0.896       0.576
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     60/99     5.03G   0.02452   0.01161  0.002185   0.03831        37       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.938       0.827       0.883       0.568
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     61/99     5.03G   0.02422   0.01167  0.002151   0.03804        45       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906         0.9       0.849       0.896       0.576
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     62/99     5.03G   0.02455   0.01157  0.002049   0.03817        34       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.928       0.828       0.888       0.569
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     63/99     5.03G   0.02403   0.01166  0.002317   0.03801        45       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.928       0.845       0.905       0.589
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     64/99     5.03G    0.0238   0.01153  0.002138   0.03747        35       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.934       0.821       0.892       0.577
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     65/99     5.03G   0.02333   0.01103   0.00186   0.03622        52       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.915       0.849         0.9       0.584
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     66/99     5.03G    0.0231   0.01104  0.001758    0.0359        46       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.918       0.831        0.89       0.576
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     67/99     5.03G   0.02343   0.01136  0.002034   0.03683        51       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906        0.91       0.847       0.895       0.576
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     68/99     5.03G   0.02296   0.01122   0.00199   0.03617        39       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.944       0.829       0.903       0.584
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     69/99     5.03G   0.02283   0.01067  0.001881   0.03538        40       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.944       0.824       0.896       0.579
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     70/99     5.03G   0.02196   0.01096    0.0018   0.03472        33       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.922       0.844       0.894       0.576
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     71/99     5.03G   0.02212   0.01084   0.00193   0.03489        43       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.922       0.828       0.894       0.578
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     72/99     5.03G   0.02262   0.01094  0.001629   0.03518        39       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.901       0.857       0.904       0.586
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     73/99     5.03G   0.02206   0.01063  0.001702   0.03438        47       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906        0.92       0.867         0.9       0.571
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     74/99     5.03G    0.0217   0.01077  0.001634    0.0341        35       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.903       0.864         0.9       0.575
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     75/99     5.03G   0.02157   0.01087  0.001604   0.03405        35       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906        0.91       0.853       0.899       0.581
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     76/99     5.03G   0.02134    0.0107   0.00147   0.03352        37       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.918       0.846       0.895       0.579
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     77/99     5.03G   0.02118   0.01072  0.001407    0.0333        43       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.911       0.855       0.893       0.591
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     78/99     5.03G   0.02142   0.01049  0.001393   0.03331        35       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.913       0.847       0.892       0.587
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     79/99     5.03G   0.02073    0.0103    0.0015   0.03253        40       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.899       0.851       0.892       0.587
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     80/99     5.03G   0.02033   0.01042  0.001546   0.03229        36       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.906       0.856       0.894       0.585
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     81/99     5.03G   0.02043    0.0105  0.001303   0.03224        45       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.907       0.851       0.895       0.587
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     82/99     5.03G   0.02031   0.01039  0.001529   0.03223        32       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.945       0.828       0.899        0.58
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     83/99     5.03G   0.01996  0.009766  0.001387   0.03112        40       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.932       0.839       0.899       0.584
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     84/99     5.03G   0.02041    0.0101  0.001355   0.03187        47       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.917       0.855       0.901       0.585
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     85/99     5.03G   0.02024  0.009832   0.00137   0.03144        38       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.929       0.838       0.902       0.591
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     86/99     5.03G   0.02007  0.009974  0.001058    0.0311        34       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.924       0.846       0.902       0.587
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     87/99     5.03G   0.01963  0.009932  0.001032   0.03059        39       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.935       0.835       0.895       0.585
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     88/99     5.03G   0.01956   0.01002  0.001464   0.03105        26       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.934       0.839       0.899       0.586
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     89/99     5.03G   0.01909   0.01014  0.001302   0.03053        40       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.932       0.839       0.903       0.586
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     90/99     5.03G   0.01915  0.009584  0.001225   0.02996        49       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906        0.93       0.843       0.901       0.581
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     91/99     5.03G   0.01912  0.009658   0.00118   0.02996        59       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.935       0.829       0.902       0.588
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     92/99     5.03G   0.01948  0.009615  0.001266   0.03036        34       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.915        0.85       0.897        0.58
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     93/99     5.03G   0.01913  0.009981  0.001004   0.03012        25       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.922       0.848         0.9       0.584
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     94/99     5.03G   0.01866  0.009573  0.001099   0.02933        39       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.921       0.846       0.899       0.582
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     95/99     5.03G   0.01873  0.009589  0.001104   0.02943        45       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906        0.94        0.84       0.899       0.586
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     96/99     5.03G   0.01892  0.009838  0.001106   0.02986        36       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.931       0.833        0.89        0.58
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     97/99     5.03G   0.01874  0.009864  0.001135   0.02974        49       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.919       0.848       0.897       0.585
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     98/99     5.03G   0.01889  0.009389  0.001019    0.0293        28       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.936       0.831       0.893       0.591
+
+     Epoch   gpu_mem       box       obj       cls     total    labels  img_size
+     99/99     5.03G   0.01847  0.009599  0.001076   0.02914        29       640
+               Class      Images      Labels           P           R      mAP@.5
+                 all         611         906       0.932       0.836       0.896       0.581
+                puma         611          81       0.888       0.786       0.874       0.545
+              adidas         611         125       0.932        0.87       0.917       0.516
+               kappa         611         104       0.725       0.788       0.846       0.506
+                 361         611          77       0.977       0.896        0.96       0.584
+                xtep         611         102       0.987       0.804       0.861       0.612
+                anta         611          94       0.963       0.904        0.95       0.658
+              lining         611          81       0.942       0.802       0.878       0.579
+                erke         611          94       0.988       0.915       0.937       0.564
+                  nb         611          77       0.971        0.86       0.906       0.666
+                nike         611          71       0.952       0.732       0.831       0.582
+100 epochs completed in 2.184 hours.
+
+Optimizer stripped from runs-sport/train-0821/exp/weights/last.pt, 14.4MB
+Optimizer stripped from runs-sport/train-0821/exp/weights/best.pt, 14.4MB
+
+Process finished with exit code 0

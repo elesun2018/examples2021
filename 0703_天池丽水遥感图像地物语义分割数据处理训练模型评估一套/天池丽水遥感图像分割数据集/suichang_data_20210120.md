@@ -1,0 +1,4 @@
+| 名称                    | 大小     |                                                         Link | md5                    |
+| :---------------------- | :------- | -----------------------------------------------------------: |
+| suichang_round1_train_210120.zip         | 2.83GB | https://tianchi-competition.oss-cn-hangzhou.aliyuncs.com/531860/suichang_round1_train_210120.zip | 384ffa280672b04726e9ef00ced0e273     |
+| suichang_round1_test_partA_210120.zip         | 530.17MB | https://tianchi-competition.oss-cn-hangzhou.aliyuncs.com/531860/suichang_round1_test_partA_210120.zip | 155394c28002f77fe9ba13ccbe19167a     |
